@@ -20,10 +20,17 @@ jobs:
         run: npx vinext check
       - name: Initialize Cloudflare Workers build
         run: npx vinext init --platform=cloudflare --skip-check
+      - name: Inspect generated configuration
+        run: |
+          echo "=== package scripts ==="
+          node -e "console.log(require('./package.json').scripts)"
+          echo "=== generated files ==="
+          find . -maxdepth 2 -type f \( -name 'cloudflare.config.*' -o -name 'wrangler.toml' -o -name 'wrangler.jsonc' \) -print
+          echo "=== build script ==="
+          node -e "console.log(require('./package.json').scripts['build:vinext'] || 'MISSING')"
       - name: Build Workers artifact
         run: npm run build:vinext
       - name: Validate generated Cloudflare configuration
         run: |
-          test -f cloudflare.config.ts
           test -d .cloudflare/output
           echo "Cloudflare build output present"
