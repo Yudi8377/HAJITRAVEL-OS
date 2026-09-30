@@ -1,0 +1,49 @@
+name: Cloudflare Workers Compatibility Test
+
+on:
+  push:
+    branches:
+      - "test/cloudflare-workers-compatibility"
+  workflow_dispatch:
+
+jobs:
+  vinext-build:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: smoke-test-key
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Compatibility check
+        run: npx vinext check
+      - name: Initialize Cloudflare Workers build
+        run: npx vinext init --platform=cloudflare --skip-check
+      - name: Build Workers artifact
+        run: npm run build:vinext
+      - name: Local Worker smoke test
+        run: |
+          nohup npm run start:vinext -- --host 127.0.0.1 --port 8787 > /tmp/vinext-worker.log 2>&1 &
+          PID=$!
+          trap 'kill $PID || true' EXIT
+          for i in {1..60}; do
+            CODE=$(curl -sS -o /tmp/health.json -w "%{http_code}" http://127.0.0.1:8787/api/health || true)
+            if [ "$CODE" = "200" ]; then
+              echo "Worker health endpoint responded HTTP 200"
+              cat /tmp/health.json
+              exit 0
+            fi
+            if [ "$CODE" != "000" ]; then
+              echo "Worker health endpoint responded HTTP $CODE"
+              cat /tmp/health.json
+            fi
+            sleep 1
+          done
+          echo "Worker preview failed to return HTTP 200 from /api/health"
+          echo "=== Worker log ==="
+          cat /tmp/vinext-worker.log
+          exit 1
