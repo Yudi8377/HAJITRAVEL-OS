@@ -9,6 +9,9 @@ on:
 jobs:
   vinext-build:
     runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: smoke-test-key
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
@@ -23,9 +26,6 @@ jobs:
       - name: Build Workers artifact
         run: npm run build:vinext
       - name: Local Worker smoke test
-        env:
-          NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
-          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: smoke-test-key
         run: |
           nohup npm run start:vinext -- --host 127.0.0.1 --port 8787 > /tmp/vinext-worker.log 2>&1 &
           PID=$!
