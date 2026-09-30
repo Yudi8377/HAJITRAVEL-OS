@@ -1,0 +1,1 @@
+import type {Departure,Jamaah,Organization,Package,ListResult} from './types';export interface TravelRepository{getOrganization():Promise<Organization|null>;listJamaah(search?:string):Promise<ListResult<Jamaah>>;listPackages():Promise<ListResult<Package>>;listDepartures():Promise<ListResult<Departure>>}
