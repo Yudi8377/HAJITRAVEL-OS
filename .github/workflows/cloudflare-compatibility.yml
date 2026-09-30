@@ -1,0 +1,21 @@
+name: Cloudflare Workers Compatibility Test
+
+on:
+  push:
+    branches:
+      - "test/cloudflare-workers-compatibility"
+  workflow_dispatch:
+
+jobs:
+  vinext-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Check Next.js compatibility with Cloudflare Workers
+        run: npx vinext check
