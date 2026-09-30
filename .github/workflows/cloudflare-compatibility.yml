@@ -18,3 +18,5 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Check Next.js compatibility with Cloudflare Workers
         run: npx vinext check
+      - name: Build with vinext
+        run: npx vinext build
