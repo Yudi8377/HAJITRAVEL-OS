@@ -1,0 +1,2 @@
+export interface AuthContract{getSession():Promise<{userId:string}|null>;signOut():Promise<void>}
+export type AuthenticationDecision={allowed:true;userId:string}|{allowed:false;reason:"NO_SESSION"|"INVALID_SESSION"}
