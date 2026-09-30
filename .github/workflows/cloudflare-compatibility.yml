@@ -20,17 +20,22 @@ jobs:
         run: npx vinext check
       - name: Initialize Cloudflare Workers build
         run: npx vinext init --platform=cloudflare --skip-check
-      - name: Inspect generated configuration
-        run: |
-          echo "=== package scripts ==="
-          node -e "console.log(require('./package.json').scripts)"
-          echo "=== generated files ==="
-          find . -maxdepth 2 -type f \( -name 'cloudflare.config.*' -o -name 'wrangler.toml' -o -name 'wrangler.jsonc' \) -print
-          echo "=== build script ==="
-          node -e "console.log(require('./package.json').scripts['build:vinext'] || 'MISSING')"
       - name: Build Workers artifact
         run: npm run build:vinext
-      - name: Validate generated Cloudflare configuration
+      - name: Local Worker smoke test
         run: |
-          test -d .cloudflare/output
-          echo "Cloudflare build output present"
+          nohup npm run start:vinext -- --port 8787 > /tmp/vinext-worker.log 2>&1 &
+          PID=$!
+          trap 'kill $PID || true' EXIT
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:8787/api/health >/tmp/health.json 2>/tmp/curl.err; then
+              echo "Health endpoint responded"
+              cat /tmp/health.json
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Worker preview failed to answer /api/health"
+          cat /tmp/vinext-worker.log
+          cat /tmp/curl.err
+          exit 1
