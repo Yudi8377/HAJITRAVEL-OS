@@ -30,15 +30,20 @@ jobs:
           nohup npm run start:vinext -- --host 127.0.0.1 --port 8787 > /tmp/vinext-worker.log 2>&1 &
           PID=$!
           trap 'kill $PID || true' EXIT
-          for i in {1..30}; do
-            if curl -fsS http://127.0.0.1:8787/api/health >/tmp/health.json 2>/tmp/curl.err; then
-              echo "Worker health endpoint responded"
+          for i in {1..60}; do
+            CODE=$(curl -sS -o /tmp/health.json -w "%{http_code}" http://127.0.0.1:8787/api/health || true)
+            if [ "$CODE" = "200" ]; then
+              echo "Worker health endpoint responded HTTP 200"
               cat /tmp/health.json
               exit 0
             fi
+            if [ "$CODE" != "000" ]; then
+              echo "Worker health endpoint responded HTTP $CODE"
+              cat /tmp/health.json
+            fi
             sleep 1
           done
-          echo "Worker preview failed to answer /api/health"
+          echo "Worker preview failed to return HTTP 200 from /api/health"
+          echo "=== Worker log ==="
           cat /tmp/vinext-worker.log
-          cat /tmp/curl.err
           exit 1
