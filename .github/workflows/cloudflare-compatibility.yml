@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  vinext-check:
+  vinext-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -16,7 +16,14 @@ jobs:
           node-version: 22
       - name: Install dependencies
         run: npm install --no-audit --no-fund
-      - name: Check Next.js compatibility with Cloudflare Workers
+      - name: Compatibility check
         run: npx vinext check
-      - name: Build with vinext
-        run: npx vinext build
+      - name: Initialize Cloudflare Workers build
+        run: npx vinext init --platform=cloudflare --skip-check
+      - name: Build Workers artifact
+        run: npm run build:vinext
+      - name: Validate generated Cloudflare configuration
+        run: |
+          test -f cloudflare.config.ts
+          test -d .cloudflare/output
+          echo "Cloudflare build output present"
