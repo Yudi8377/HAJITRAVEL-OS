@@ -1,0 +1,4 @@
+import Link from 'next/link'
+import { ArrowLeft,ShieldCheck } from 'lucide-react'
+import InquiryForm from './InquiryForm'
+export default function InquirePage(){return <main className="inquiryPage"><div className="inquiryShell"><Link href="/" className="detailBack"><ArrowLeft size={15}/> Kembali ke website</Link><div className="inquiryHeader"><span className="sectionKicker">BEGIN YOUR JOURNEY</span><h1>Tell us what your<br/><em>journey needs.</em></h1><p>Mulai dari kebutuhan sederhana sampai perjalanan keluarga atau grup. Inquiry ini masuk ke operating system untuk ditindaklanjuti tim.</p></div><div className="inquiryCard"><div className="inquiryCardHead"><div><b>Journey consultation</b><span>Formulir konsultasi publik</span></div><ShieldCheck size={20}/></div><InquiryForm/></div></div></main>}
