@@ -1,0 +1,4 @@
+import { createBrowserClient } from '@supabase/ssr'
+import type { AuthContract } from './auth-contract'
+function client(){const url=process.env.NEXT_PUBLIC_SUPABASE_URL;const key=process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;if(!url||!key)throw new Error('HAJITRAVEL Supabase target is not configured.');return createBrowserClient(url,key)}
+export const supabaseAuthAdapter:AuthContract={async getSession(){const {data,error}=await client().auth.getSession();if(error)throw error;const userId=data.session?.user?.id;return userId?{userId}:null},async signOut(){const {error}=await client().auth.signOut();if(error)throw error}}
