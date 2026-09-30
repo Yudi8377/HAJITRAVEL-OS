@@ -1,0 +1,2 @@
+export const CAPABILITIES=["jamaah.read","jamaah.create","jamaah.update","jamaah.delete","package.read","package.create","package.update","departure.read","departure.create","departure.update","finance.read","finance.create","finance.approve","compliance.read","compliance.create","compliance.approve","reports.read","reports.print","audit.read"] as const
+export type Capability=typeof CAPABILITIES[number]
