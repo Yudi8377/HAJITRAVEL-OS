@@ -11,6 +11,8 @@ export async function updateSession(request: NextRequest) {
     path === '/login' ||
     path === '/signup' ||
     path === '/api/health' ||
+    path === '/packages' || path.startsWith('/packages/') ||
+    path === '/inquire' ||
     path.startsWith('/auth/') ||
     path.startsWith('/_next/') ||
     path === '/favicon.ico'
