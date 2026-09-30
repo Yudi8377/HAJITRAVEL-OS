@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import {
-  ArrowRight, Check, ChevronRight, Clock3, Compass, FileCheck2, Hotel,
+  ArrowRight, CalendarDays, Check, ChevronRight, Clock3, Compass, FileCheck2, Hotel,
   MapPinned, Menu, Plane, ShieldCheck, Sparkles, Users, WalletCards
 } from 'lucide-react'
 import { HaajiLogo } from '../src/components/HaajiLogo'
