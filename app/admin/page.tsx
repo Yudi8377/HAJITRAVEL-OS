@@ -1,4 +1,7 @@
-import Link from 'next/link'\n\nexport const dynamic = 'force-dynamic'\nexport const revalidate = 0
+import Link from 'next/link'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 import { Activity, ArrowUpRight, CircleDollarSign, FileCheck2, Plane, ShieldCheck, Users, AlertTriangle } from 'lucide-react'
 import { HaajiLogo } from '../../src/components/HaajiLogo'
 import { getDashboardSnapshot } from '../../src/data/dashboard'
