@@ -1,0 +1,57 @@
+name: Self-Hosted Deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+concurrency:
+  group: hajitravel-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: ${{ secrets.DEPLOY_HOST != '' && secrets.DEPLOY_USER != '' && secrets.DEPLOY_SSH_KEY != '' }}
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Validate source
+        run: |
+          test -f Dockerfile
+          test -f docker-compose.yml
+          test -f .env.production.example
+
+      - name: Configure SSH
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -p "${{ secrets.DEPLOY_PORT || 22 }}" -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Deploy and health-check
+        env:
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          USER: ${{ secrets.DEPLOY_USER }}
+          PORT: ${{ secrets.DEPLOY_PORT || 22 }}
+          PATH_ON_SERVER: ${{ secrets.DEPLOY_PATH || '/opt/hajitravel-os' }}
+        run: |
+          ssh -p "$PORT" "$USER@$HOST" "set -e
+            mkdir -p '$PATH_ON_SERVER'
+            cd '$PATH_ON_SERVER'
+            if [ ! -d .git ]; then
+              git clone 'https://github.com/Yudi8377/HAJITRAVEL-OS.git' .
+            fi
+            git fetch origin main
+            git checkout main
+            git reset --hard origin/main
+            test -f .env.production
+            docker compose up -d --build
+            sleep 8
+            curl -fsS http://127.0.0.1:3000/api/health
+            docker compose ps
+          "
