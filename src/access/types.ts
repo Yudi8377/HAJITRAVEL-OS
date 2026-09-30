@@ -1,0 +1,2 @@
+export type OrganizationScope={organizationId:string;membershipId:string;userId:string}
+export type AccessContext={authenticated:boolean;userId:string|null;organizationId:string|null;membershipId:string|null;role:string|null;capabilities:string[]}
