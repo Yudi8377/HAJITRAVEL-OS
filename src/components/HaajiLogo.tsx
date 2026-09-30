@@ -1,0 +1,2 @@
+import Link from "next/link"
+export function HaajiLogo({light=false}:{light?:boolean}){return <Link href="/" className={"siteLogo "+(light?"siteLogoLight":"")} aria-label="HAJI TRAVEL OS"><span className="logoMark">H</span><span><b>HAJI</b><small>TRAVEL OS</small></span></Link>}
