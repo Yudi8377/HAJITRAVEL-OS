@@ -1,16 +1,11 @@
 import Link from 'next/link'
 import {
-  ArrowRight, Check, ChevronRight, Clock3, Compass, FileCheck2, Hotel,
+  ArrowRight, CalendarDays, Check, ChevronRight, Clock3, Compass, FileCheck2, Hotel,
   MapPinned, Menu, Plane, ShieldCheck, Sparkles, Users, WalletCards
 } from 'lucide-react'
 import { HaajiLogo } from '../src/components/HaajiLogo'
 import type { LucideIcon } from 'lucide-react'
-
-const packages = [
-  { tag:'UMRAH', title:'Umrah Premium', days:'12 Hari', desc:'Perjalanan nyaman dengan akomodasi terpilih, pendampingan ibadah, dan ground service terkoordinasi.', meta:'Makkah · Madinah', featured:true },
-  { tag:'HAJI', title:'Haji Reguler', days:'Program Musiman', desc:'Perjalanan Haji dengan alur persiapan, dokumen, akomodasi, transportasi, dan monitoring yang terstruktur.', meta:'Makkah · Madinah · Masyair' },
-  { tag:'PRIVATE', title:'Private Family', days:'Custom', desc:'Rancang perjalanan keluarga atau grup khusus dengan itinerary dan layanan yang disesuaikan.', meta:'Tailored Journey' },
-]
+import { getPublicPackages } from '../src/data/public-catalog'
 
 const services: Array<[string,string,LucideIcon]> = [
   ['Jamaah','Profil, dokumen, visa, consent, pembayaran, dan readiness.',Users],
@@ -30,7 +25,8 @@ function Ornament() {
   return <div className="sacredOrnament" aria-hidden="true"><span/><span/><span/></div>
 }
 
-export default function PublicHome() {
+export default async function PublicHome() {
+  const packages = await getPublicPackages()
   return <main className="premiumTravel">
     <div className="topNotice"><span><Sparkles size={13}/> Premium Hajj & Umrah Journey</span><span className="topNoticeRight">Indonesia · Makkah · Madinah</span></div>
 
@@ -40,7 +36,7 @@ export default function PublicHome() {
         <Link href="/packages">Program</Link>
         <a href="#experience">Experience</a>
         <a href="#process">Alur</a>
-        <Link href="/inquire">Kontak</Link>
+        <Link href="/faq">FAQ</Link><Link href="/inquire">Kontak</Link>
         <Link href="/login" className="premiumNavCta">Portal <ArrowRight size={15}/></Link>
       </div>
       <button className="mobileMenu" aria-label="Menu"><Menu size={21}/></button>
@@ -86,19 +82,11 @@ export default function PublicHome() {
       <Link href="/packages" className="searchButton"><span>Explore</span><ArrowRight size={17}/></Link>
     </div>
 
-    <section className="trustRow">
-      <div><ShieldCheck/><b>Secure operations</b><span>Data & access controlled</span></div>
-      <div><Hotel/><b>Curated stays</b><span>Accommodation planned</span></div>
-      <div><MapPinned/><b>Ground support</b><span>Journey coordinated</span></div>
-      <div><Clock3/><b>Dedicated care</b><span>Support throughout</span></div>
-    </section>
+    <section className="trustRow"><div><ShieldCheck/><b>Published data</b><span>Only information released by the system</span></div><div><CalendarDays/><b>Departures</b><span>Shown only when available in the system</span></div><div><MapPinned/><b>Journey detail</b><span>Itinerary can be published per program</span></div><div><Clock3/><b>Inquiry flow</b><span>Requests enter the operating system</span></div></section>
 
     <section id="program" className="premiumSection programSection">
-      <div className="premiumSectionHead"><div><span className="sectionKicker">THE JOURNEY COLLECTION</span><h2>Find the journey<br/><em>that feels right.</em></h2></div><p>Program ditampilkan sebagai pengalaman, bukan sekadar daftar paket. Detail final dapat dikelola tim travel melalui operating system.</p></div>
-      <div className="programGrid">{packages.map((item,index)=><article className={item.featured?'programCard programFeatured':'programCard'} key={item.title}>
-        <div className="programImage"><span>{item.tag}</span><b>0{index+1}</b><Ornament/><div className="programImageLabel">{item.title}</div></div>
-        <div className="programBody"><div className="programMeta"><span>{item.days}</span><span>{item.meta}</span></div><h3>{item.title}</h3><p>{item.desc}</p><Link href="/packages">Explore journey <ChevronRight size={15}/></Link></div>
-      </article>)}</div>
+      <div className="premiumSectionHead"><div><span className="sectionKicker">THE JOURNEY COLLECTION</span><h2>Find the journey<br/><em>that feels right.</em></h2></div><p>Program ditampilkan sebagai pengalaman, bukan sekadar daftar paket. Detail final berasal dari program yang dipublikasikan melalui operating system.</p></div>
+      <div className="programGrid">{packages.length===0?<div className="catalogEmpty"><ShieldCheck size={25}/><h3>Belum ada program publik.</h3><p>Program akan muncul di sini setelah diterbitkan dari operating system. Tidak ada paket demo yang disamarkan sebagai data nyata.</p><Link href="/inquire" className="goldButton">Mulai konsultasi <ArrowRight size={16}/></Link></div>:packages.slice(0,3).map((item,index)=><article className={index===0 ? "programCard programFeatured" : "programCard"} key={item.id}><div className="programImage"><span>{item.package_type==="HAJI_KHUSUS"?"HAJI KHUSUS":"UMRAH"}</span><b>{"0"+(index+1)}</b><Ornament/><div className="programImageLabel">{item.name}</div></div><div className="programBody"><div className="programMeta"><span>{item.package_code}</span><span>Published</span></div><h3>{item.name}</h3><p>Program resmi yang diterbitkan dari operating system. Detail keberangkatan, itinerary, dan layanan publik mengikuti data yang tersedia.</p><Link href={"/packages/"+item.id}>Explore journey <ChevronRight size={15}/></Link></div></article>)}</div>
     </section>
 
     <section id="experience" className="experienceBand">
