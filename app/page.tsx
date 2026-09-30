@@ -1,70 +1,120 @@
 import Link from 'next/link'
-import { ArrowRight, CheckCircle2, ShieldCheck, Plane, Users, WalletCards, FileCheck2, Hotel, Headphones, MapPinned } from 'lucide-react'
+import {
+  ArrowRight, Check, ChevronRight, Clock3, Compass, FileCheck2, Hotel,
+  MapPinned, Menu, Plane, ShieldCheck, Sparkles, Users, WalletCards
+} from 'lucide-react'
 import { HaajiLogo } from '../src/components/HaajiLogo'
 import type { LucideIcon } from 'lucide-react'
 
-const services: Array<[string, string, LucideIcon]> = [
-  ['Jamaah', 'Profil, dokumen, visa, consent, pembayaran, dan readiness dalam satu data.', Users],
-  ['Paket Haji & Umrah', 'Susun paket, periode keberangkatan, hotel, penerbangan, transport, dan layanan.', Plane],
-  ['Finance', 'Invoice, pembayaran, rekonsiliasi, outstanding, dan approval yang terkontrol.', WalletCards],
-  ['Compliance', 'Requirement, evidence, review, incident, dan audit trail terhubung.', FileCheck2],
+const packages = [
+  { tag:'UMRAH', title:'Umrah Premium', days:'12 Hari', desc:'Perjalanan nyaman dengan akomodasi terpilih, pendampingan ibadah, dan ground service terkoordinasi.', meta:'Makkah · Madinah', featured:true },
+  { tag:'HAJI', title:'Haji Reguler', days:'Program Musiman', desc:'Perjalanan Haji dengan alur persiapan, dokumen, akomodasi, transportasi, dan monitoring yang terstruktur.', meta:'Makkah · Madinah · Masyair' },
+  { tag:'PRIVATE', title:'Private Family', days:'Custom', desc:'Rancang perjalanan keluarga atau grup khusus dengan itinerary dan layanan yang disesuaikan.', meta:'Tailored Journey' },
 ]
 
-const journeys = [
-  ['01', 'Daftar', 'Jamaah memilih paket dan memulai proses pendaftaran.'],
-  ['02', 'Verifikasi', 'Dokumen, data, pembayaran, dan persyaratan diperiksa.'],
-  ['03', 'Persiapan', 'Hotel, flight, transport, group, briefing, dan checklist disiapkan.'],
-  ['04', 'Berangkat', 'Tim operasi memantau readiness sampai jamaah kembali.'],
+const services: Array<[string,string,LucideIcon]> = [
+  ['Jamaah','Profil, dokumen, visa, consent, pembayaran, dan readiness.',Users],
+  ['Paket perjalanan','Flight, hotel, transport, itinerary, dan layanan dalam satu alur.',Plane],
+  ['Finance','Invoice, pembayaran, rekonsiliasi, outstanding, dan approval.',WalletCards],
+  ['Compliance','Requirement, evidence, review, incident, dan audit trail.',FileCheck2],
 ]
+
+const journey = [
+  ['01','Konsultasi','Pilih kebutuhan perjalanan dan diskusikan program.'],
+  ['02','Pendaftaran','Lengkapi data, dokumen, dan persyaratan jamaah.'],
+  ['03','Persiapan','Tim mengawal itinerary, hotel, flight, transport, dan briefing.'],
+  ['04','Perjalanan','Operasional memonitor perjalanan sampai kepulangan.'],
+]
+
+function Ornament() {
+  return <div className="sacredOrnament" aria-hidden="true"><span/><span/><span/></div>
+}
 
 export default function PublicHome() {
-  return <main className="publicSite">
-    <nav className="publicNav">
+  return <main className="premiumTravel">
+    <div className="topNotice"><span><Sparkles size={13}/> Premium Hajj & Umrah Journey</span><span className="topNoticeRight">Indonesia · Makkah · Madinah</span></div>
+
+    <nav className="premiumNav">
       <HaajiLogo light />
-      <div className="publicLinks">
-        <a href="#paket">Paket</a><a href="#layanan">Layanan</a><a href="#alur">Alur</a><a href="#kontak">Kontak</a>
-        <Link href="/login" className="navLogin">Masuk <ArrowRight size={15}/></Link>
+      <div className="premiumLinks">
+        <a href="#program">Program</a>
+        <a href="#experience">Experience</a>
+        <a href="#process">Alur</a>
+        <a href="#contact">Kontak</a>
+        <Link href="/login" className="premiumNavCta">Portal <ArrowRight size={15}/></Link>
       </div>
+      <button className="mobileMenu" aria-label="Menu"><Menu size={21}/></button>
     </nav>
 
-    <section className="hero travelHero">
-      <div className="heroDecor heroDecorOne"/><div className="heroDecor heroDecorTwo"/>
-      <div className="heroCopy">
-        <div className="pill"><span/> HAJI & UMRAH · TRUSTED JOURNEY</div>
-        <h1>Berangkat dengan tenang.<br/><em>Beribadah dengan khusyuk.</em></h1>
-        <p>HAJI TRAVEL OS menghadirkan pengalaman perjalanan Haji & Umrah yang rapi, transparan, dan terkontrol — dari konsultasi, pendaftaran, persiapan, keberangkatan hingga kepulangan.</p>
-        <div className="heroActions"><Link href="#paket" className="primaryCta">Jelajahi perjalanan <ArrowRight size={17}/></Link><Link href="/login" className="secondaryCta">Portal Jamaah / Admin</Link></div>
-        <div className="heroTrust"><ShieldCheck size={18}/><span>Data terkontrol · Tim operasional · Pendampingan end-to-end</span></div>
+    <section className="premiumHero">
+      <div className="heroTexture"/>
+      <div className="heroOrb heroOrbOne"/>
+      <div className="heroOrb heroOrbTwo"/>
+      <div className="premiumHeroCopy">
+        <div className="premiumEyebrow"><span/> JOURNEY WITH PURPOSE</div>
+        <h1>Your sacred journey,<br/><em>beautifully arranged.</em></h1>
+        <p>Perjalanan Haji & Umrah yang dirancang dengan perhatian pada setiap detail — dari niat pertama hingga kembali ke rumah.</p>
+        <div className="heroButtons">
+          <a href="#program" className="goldButton">Explore journeys <ArrowRight size={16}/></a>
+          <a href="#contact" className="ghostButton">Talk to our journey team</a>
+        </div>
+        <div className="heroAssurance"><ShieldCheck size={17}/><span>Structured operations · Clear journey · Dedicated support</span></div>
       </div>
-      <div className="heroPanel">
-        <div className="heroPanelTop"><span>YOUR JOURNEY</span><b>1448 H</b></div>
-        <div className="kaabaArt"><div className="kaabaCube"><i/><span>الكعبة</span></div><div className="orbit orbitA"/><div className="orbit orbitB"/></div>
-        <div className="heroPanelBottom"><div><small>JOURNEY STATUS</small><b>Ready when you are</b></div><CheckCircle2 size={20}/></div>
+
+      <div className="heroVisual" aria-label="Premium Hajj and Umrah visual">
+        <div className="visualFrame">
+          <div className="visualTop"><span>HAJI TRAVEL OS</span><b>1448 H</b></div>
+          <div className="visualScene">
+            <div className="moon"/>
+            <div className="minaret minaretOne"><i/></div>
+            <div className="minaret minaretTwo"><i/></div>
+            <div className="mosqueRoof"><span/><span/><span/><span/><span/></div>
+            <div className="kaabaPremium"><b>الكعبة</b><i/></div>
+            <div className="lightRing"/>
+          </div>
+          <div className="visualCaption"><div><small>NEXT DESTINATION</small><strong>Makkah Al-Mukarramah</strong></div><Compass size={20}/></div>
+        </div>
+        <div className="floatingCard floatingCardTop"><Sparkles size={16}/><div><small>CURATED</small><b>Journey planning</b></div></div>
+        <div className="floatingCard floatingCardBottom"><Check size={16}/><div><small>READY</small><b>Every detail considered</b></div></div>
       </div>
     </section>
 
-    <section className="statStrip"><div><b>01</b><span>Personal service</span></div><div><b>02</b><span>Clear itinerary</span></div><div><b>03</b><span>Controlled operations</span></div><div><b>04</b><span>Secure data</span></div></section>
+    <div className="quickSearch">
+      <div><small>JOURNEY TYPE</small><b>Hajj & Umrah</b></div>
+      <div><small>DESTINATION</small><b>Makkah & Madinah</b></div>
+      <div><small>TRIP STYLE</small><b>Premium experience</b></div>
+      <Link href="/login" className="searchButton"><span>Explore</span><ArrowRight size={17}/></Link>
+    </div>
 
-    <section id="paket" className="section packageSection">
-      <div className="sectionHead"><div><span className="eyebrowLight">JOURNEY COLLECTION</span><h2>Pilih perjalanan yang<br/><em>sesuai kebutuhan.</em></h2></div><p>Landing page Travel Haji & Umrah yang elegan untuk calon jamaah dan tetap terhubung dengan operating system internal.</p></div>
-      <div className="packageGrid">
-        <article className="packageCard featured"><span className="packageTag">MOST COMPLETE</span><h3>Haji Reguler</h3><p>Program terstruktur dengan pendampingan persiapan, akomodasi, transportasi, dan layanan jamaah.</p><div><b>Full Journey</b><span>Consultation · Preparation · Departure</span></div><Link href="/login">Konsultasi paket <ArrowRight size={15}/></Link></article>
-        <article className="packageCard"><span className="packageTag">UMRAH</span><h3>Umrah Premium</h3><p>Pengalaman Umrah nyaman dengan pilihan hotel, jadwal, dan layanan yang dapat disesuaikan.</p><div><b>Comfort Journey</b><span>Hotel · Flight · Ground Service</span></div><Link href="/login">Tanya lebih lanjut <ArrowRight size={15}/></Link></article>
-        <article className="packageCard"><span className="packageTag">FAMILY</span><h3>Private Family</h3><p>Perjalanan personal untuk keluarga, komunitas, atau rombongan khusus.</p><div><b>Tailored Journey</b><span>Private Group · Dedicated Support</span></div><Link href="/login">Buat perjalanan <ArrowRight size={15}/></Link></article>
-      </div>
+    <section className="trustRow">
+      <div><ShieldCheck/><b>Secure operations</b><span>Data & access controlled</span></div>
+      <div><Hotel/><b>Curated stays</b><span>Accommodation planned</span></div>
+      <div><MapPinned/><b>Ground support</b><span>Journey coordinated</span></div>
+      <div><Clock3/><b>Dedicated care</b><span>Support throughout</span></div>
     </section>
 
-    <section id="layanan" className="section servicesSection">
-      <div className="sectionHead"><div><span className="eyebrowLight">OUR SERVICES</span><h2>Satu tim.<br/><em>Satu perjalanan.</em></h2></div><p>Di belakang pengalaman jamaah ada sistem operasi yang menjaga setiap detail tetap terlihat dan dapat ditindaklanjuti.</p></div>
-      <div className="serviceGrid">{services.map(([title, desc, Icon], i) => <div className="serviceCard" key={String(title)}><div className="serviceIcon"><Icon size={21}/></div><span>0{i+1}</span><h3>{title}</h3><p>{desc}</p><ArrowRight size={18}/></div>)}</div>
+    <section id="program" className="premiumSection programSection">
+      <div className="premiumSectionHead"><div><span className="sectionKicker">THE JOURNEY COLLECTION</span><h2>Find the journey<br/><em>that feels right.</em></h2></div><p>Program ditampilkan sebagai pengalaman, bukan sekadar daftar paket. Detail final dapat dikelola tim travel melalui operating system.</p></div>
+      <div className="programGrid">{packages.map((item,index)=><article className={item.featured?'programCard programFeatured':'programCard'} key={item.title}>
+        <div className="programImage"><span>{item.tag}</span><b>0{index+1}</b><Ornament/><div className="programImageLabel">{item.title}</div></div>
+        <div className="programBody"><div className="programMeta"><span>{item.days}</span><span>{item.meta}</span></div><h3>{item.title}</h3><p>{item.desc}</p><Link href="/login">Discuss this journey <ChevronRight size={15}/></Link></div>
+      </article>)}</div>
     </section>
 
-    <section id="alur" className="workflow"><div className="workflowInner"><div><span className="eyebrowLight">THE JOURNEY</span><h2>Dari niat menjadi<br/><em>perjalanan nyata.</em></h2><p>Setiap tahap memiliki owner, checklist, status, dan evidence sehingga jamaah dan tim travel tahu apa yang harus dilakukan berikutnya.</p></div><div className="flowList">{journeys.map(x => <div className="flowItem" key={x[0]}><b>{x[0]}</b><div><strong>{x[1]}</strong><span>{x[2]}</span></div><CheckCircle2 size={18}/></div>)}</div></div></section>
+    <section id="experience" className="experienceBand">
+      <div className="experienceVisual"><div className="archWindow"><div className="archMoon"/><div className="archCity"><i/><i/><i/><i/><i/><i/></div><div className="archStar s1"/><div className="archStar s2"/><div className="archStar s3"/></div></div>
+      <div className="experienceCopy"><span className="sectionKicker">MORE THAN A BOOKING</span><h2>A journey designed<br/><em>around your peace.</em></h2><p>HAJI TRAVEL OS menghubungkan pengalaman jamaah dengan operasi di belakang layar. Tim dapat melihat readiness, dokumen, pembayaran, itinerary, dan kebutuhan layanan dalam satu alur.</p><div className="experiencePoints"><div><b>01</b><span>Personal journey planning</span></div><div><b>02</b><span>Clear operational visibility</span></div><div><b>03</b><span>Controlled data & access</span></div></div><a href="#process" className="textLink">See how the journey works <ArrowRight size={15}/></a></div>
+    </section>
 
-    <section className="experienceSection"><div className="experienceIntro"><span className="eyebrow">WHY HAJI TRAVEL OS</span><h2>Lebih dari booking.<br/><em>Ini perjalanan yang dijaga.</em></h2></div><div className="experienceGrid"><div><Hotel/><b>Akomodasi terencana</b><span>Hotel dan service tersusun dalam itinerary.</span></div><div><MapPinned/><b>Ground handling</b><span>Transport dan layanan lapangan terkoordinasi.</span></div><div><Headphones/><b>Dedicated support</b><span>Tim siap mendampingi jamaah sepanjang perjalanan.</span></div><div><ShieldCheck/><b>Secure operations</b><span>Data dan akses internal dikelola dengan kontrol berlapis.</span></div></div></section>
+    <section id="process" className="premiumSection processSection">
+      <div className="premiumSectionHead"><div><span className="sectionKicker">YOUR JOURNEY</span><h2>From intention<br/><em>to arrival.</em></h2></div><p>Alur sederhana di sisi jamaah, dengan kontrol yang lebih dalam di sisi operasional.</p></div>
+      <div className="journeyGrid">{journey.map(([no,title,desc])=><div className="journeyStep" key={no}><span>{no}</span><div><h3>{title}</h3><p>{desc}</p></div><ArrowRight size={18}/></div>)}</div>
+    </section>
 
-    <section id="kontak" className="ctaSection"><div><span className="eyebrow">START YOUR JOURNEY</span><h2>Siap memulai perjalanan<br/><em>ke Tanah Suci?</em></h2><p>Hubungi tim kami untuk konsultasi paket dan kebutuhan perjalanan Anda.</p></div><div className="ctaActions"><Link href="/login" className="primaryCta">Masuk Portal <ArrowRight size={17}/></Link><a href="mailto:info@hajitravel.id" className="secondaryCta">Hubungi Travel</a></div></section>
+    <section className="serviceBand"><div className="serviceBandHead"><span className="sectionKicker">ONE OPERATING SYSTEM</span><h2>Every detail,<br/><em>connected.</em></h2><p>Di balik pengalaman premium, ada sistem yang menjaga data, finance, compliance, dan operasi tetap terhubung.</p></div><div className="serviceList">{services.map(([title,desc,Icon],i)=><div className="serviceRow" key={title}><span>0{i+1}</span><Icon size={21}/><div><b>{title}</b><p>{desc}</p></div><ArrowRight size={17}/></div>)}</div></section>
 
-    <footer className="publicFooter"><HaajiLogo/><span>HAJI TRAVEL OS · Hajj & Umrah travel operating system.</span><Link href="/login">Admin Portal →</Link></footer>
+    <section id="contact" className="premiumCta"><div className="ctaGlow"/><span className="sectionKicker">BEGIN YOUR JOURNEY</span><h2>Ready for a more<br/><em>meaningful journey?</em></h2><p>Mulai dengan konsultasi. Tim kami membantu menerjemahkan kebutuhan Anda menjadi perjalanan yang terencana.</p><div className="ctaButtons"><Link href="/login" className="goldButton">Open travel portal <ArrowRight size={16}/></Link><a href="mailto:info@hajitravel.id" className="ghostButton">Contact journey team</a></div></section>
+
+    <footer className="premiumFooter"><div><HaajiLogo/><p>Hajj & Umrah travel operating system.</p></div><div className="footerLinks"><a href="#program">Programs</a><a href="#experience">Experience</a><a href="#process">Journey</a><Link href="/login">Portal</Link></div><span>© 2026 HAJI TRAVEL OS</span></footer>
   </main>
 }
