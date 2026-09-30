@@ -1,0 +1,1 @@
+import {demoRepository} from './demo-repository';import {supabaseRepository} from './supabase-repository';export function getRepository(){return process.env.NEXT_PUBLIC_SUPABASE_URL&&process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?supabaseRepository:demoRepository}
