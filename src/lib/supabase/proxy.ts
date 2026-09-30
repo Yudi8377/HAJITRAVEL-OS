@@ -9,6 +9,7 @@ export async function updateSession(request: NextRequest) {
   const publicPath =
     path === '/' ||
     path === '/login' ||
+    path === '/signup' ||
     path === '/api/health' ||
     path.startsWith('/auth/') ||
     path.startsWith('/_next/') ||
