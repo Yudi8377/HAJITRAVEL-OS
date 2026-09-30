@@ -1,8 +1,9 @@
 import Link from 'next/link'
 import { ArrowRight, CheckCircle2, ShieldCheck, Plane, Users, WalletCards, FileCheck2, Hotel, Headphones, MapPinned } from 'lucide-react'
 import { HaajiLogo } from '../src/components/HaajiLogo'
+import type { LucideIcon } from 'lucide-react'
 
-const services = [
+const services: Array<[string, string, LucideIcon]> = [
   ['Jamaah', 'Profil, dokumen, visa, consent, pembayaran, dan readiness dalam satu data.', Users],
   ['Paket Haji & Umrah', 'Susun paket, periode keberangkatan, hotel, penerbangan, transport, dan layanan.', Plane],
   ['Finance', 'Invoice, pembayaran, rekonsiliasi, outstanding, dan approval yang terkontrol.', WalletCards],
