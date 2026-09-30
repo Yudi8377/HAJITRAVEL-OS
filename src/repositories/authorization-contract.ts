@@ -1,0 +1,1 @@
+import type {AccessContext} from "../access/types";import type {Capability} from "../access/capability";export interface AuthorizationContract{requireAuthenticated():Promise<AccessContext>;requireCapability(capability:Capability):Promise<AccessContext>;requireOrganizationScope():Promise<AccessContext>}
