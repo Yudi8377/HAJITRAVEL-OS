@@ -37,10 +37,10 @@ export default function PublicHome() {
     <nav className="premiumNav">
       <HaajiLogo light />
       <div className="premiumLinks">
-        <a href="#program">Program</a>
+        <Link href="/packages">Program</Link>
         <a href="#experience">Experience</a>
         <a href="#process">Alur</a>
-        <a href="#contact">Kontak</a>
+        <Link href="/inquire">Kontak</Link>
         <Link href="/login" className="premiumNavCta">Portal <ArrowRight size={15}/></Link>
       </div>
       <button className="mobileMenu" aria-label="Menu"><Menu size={21}/></button>
@@ -55,8 +55,8 @@ export default function PublicHome() {
         <h1>Your sacred journey,<br/><em>beautifully arranged.</em></h1>
         <p>Perjalanan Haji & Umrah yang dirancang dengan perhatian pada setiap detail — dari niat pertama hingga kembali ke rumah.</p>
         <div className="heroButtons">
-          <a href="#program" className="goldButton">Explore journeys <ArrowRight size={16}/></a>
-          <a href="#contact" className="ghostButton">Talk to our journey team</a>
+          <a href="/packages" className="goldButton">Explore journeys <ArrowRight size={16}/></a>
+          <a href="/inquire" className="ghostButton">Talk to our journey team</a>
         </div>
         <div className="heroAssurance"><ShieldCheck size={17}/><span>Structured operations · Clear journey · Dedicated support</span></div>
       </div>
@@ -83,7 +83,7 @@ export default function PublicHome() {
       <div><small>JOURNEY TYPE</small><b>Hajj & Umrah</b></div>
       <div><small>DESTINATION</small><b>Makkah & Madinah</b></div>
       <div><small>TRIP STYLE</small><b>Premium experience</b></div>
-      <Link href="/login" className="searchButton"><span>Explore</span><ArrowRight size={17}/></Link>
+      <Link href="/packages" className="searchButton"><span>Explore</span><ArrowRight size={17}/></Link>
     </div>
 
     <section className="trustRow">
@@ -97,7 +97,7 @@ export default function PublicHome() {
       <div className="premiumSectionHead"><div><span className="sectionKicker">THE JOURNEY COLLECTION</span><h2>Find the journey<br/><em>that feels right.</em></h2></div><p>Program ditampilkan sebagai pengalaman, bukan sekadar daftar paket. Detail final dapat dikelola tim travel melalui operating system.</p></div>
       <div className="programGrid">{packages.map((item,index)=><article className={item.featured?'programCard programFeatured':'programCard'} key={item.title}>
         <div className="programImage"><span>{item.tag}</span><b>0{index+1}</b><Ornament/><div className="programImageLabel">{item.title}</div></div>
-        <div className="programBody"><div className="programMeta"><span>{item.days}</span><span>{item.meta}</span></div><h3>{item.title}</h3><p>{item.desc}</p><Link href="/login">Discuss this journey <ChevronRight size={15}/></Link></div>
+        <div className="programBody"><div className="programMeta"><span>{item.days}</span><span>{item.meta}</span></div><h3>{item.title}</h3><p>{item.desc}</p><Link href="/packages">Explore journey <ChevronRight size={15}/></Link></div>
       </article>)}</div>
     </section>
 
@@ -113,8 +113,8 @@ export default function PublicHome() {
 
     <section className="serviceBand"><div className="serviceBandHead"><span className="sectionKicker">ONE OPERATING SYSTEM</span><h2>Every detail,<br/><em>connected.</em></h2><p>Di balik pengalaman premium, ada sistem yang menjaga data, finance, compliance, dan operasi tetap terhubung.</p></div><div className="serviceList">{services.map(([title,desc,Icon],i)=><div className="serviceRow" key={title}><span>0{i+1}</span><Icon size={21}/><div><b>{title}</b><p>{desc}</p></div><ArrowRight size={17}/></div>)}</div></section>
 
-    <section id="contact" className="premiumCta"><div className="ctaGlow"/><span className="sectionKicker">BEGIN YOUR JOURNEY</span><h2>Ready for a more<br/><em>meaningful journey?</em></h2><p>Mulai dengan konsultasi. Tim kami membantu menerjemahkan kebutuhan Anda menjadi perjalanan yang terencana.</p><div className="ctaButtons"><Link href="/login" className="goldButton">Open travel portal <ArrowRight size={16}/></Link><a href="mailto:info@hajitravel.id" className="ghostButton">Contact journey team</a></div></section>
+    <section id="contact" className="premiumCta"><div className="ctaGlow"/><span className="sectionKicker">BEGIN YOUR JOURNEY</span><h2>Ready for a more<br/><em>meaningful journey?</em></h2><p>Mulai dengan konsultasi. Tim kami membantu menerjemahkan kebutuhan Anda menjadi perjalanan yang terencana.</p><div className="ctaButtons"><Link href="/inquire" className="goldButton">Start consultation <ArrowRight size={16}/></Link><Link href="/inquire" className="ghostButton">Contact journey team</Link></div></section>
 
-    <footer className="premiumFooter"><div><HaajiLogo/><p>Hajj & Umrah travel operating system.</p></div><div className="footerLinks"><a href="#program">Programs</a><a href="#experience">Experience</a><a href="#process">Journey</a><Link href="/login">Portal</Link></div><span>© 2026 HAJI TRAVEL OS</span></footer>
+    <footer className="premiumFooter"><div><HaajiLogo/><p>Hajj & Umrah travel operating system.</p></div><div className="footerLinks"><Link href="/packages">Programs</Link><a href="#experience">Experience</a><a href="#process">Journey</a><Link href="/login">Portal</Link></div><span>© 2026 HAJI TRAVEL OS</span></footer>
   </main>
 }
