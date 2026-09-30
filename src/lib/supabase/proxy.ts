@@ -5,6 +5,16 @@ export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request })
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+  const path = request.nextUrl.pathname
+  const publicPath =
+    path === '/' ||
+    path === '/login' ||
+    path === '/api/health' ||
+    path.startsWith('/auth/') ||
+    path.startsWith('/_next/') ||
+    path === '/favicon.ico'
+
+  // Health must remain reachable by external deployment monitors.
   if (!url || !key) return response
 
   const supabase = createServerClient(url, key, {
@@ -22,8 +32,6 @@ export async function updateSession(request: NextRequest) {
 
   const { data } = await supabase.auth.getClaims()
   const user = data?.claims
-  const path = request.nextUrl.pathname
-  const publicPath = path === '/' || path === '/login' || path.startsWith('/auth/') || path.startsWith('/_next/') || path === '/favicon.ico'
 
   if (!user && !publicPath) {
     const next = request.nextUrl.clone()
@@ -37,6 +45,12 @@ export async function updateSession(request: NextRequest) {
     next.pathname = '/admin'
     next.search = ''
     return NextResponse.redirect(next)
+  }
+
+  // Never allow a shared CDN/proxy to cache authenticated responses that may
+  // contain refreshed session cookies.
+  if (user && !publicPath) {
+    response.headers.set('Cache-Control', 'private, no-store')
   }
 
   return response
