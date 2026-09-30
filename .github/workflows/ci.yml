@@ -13,5 +13,7 @@ jobs:
         with:
           node-version: 22
       - run: npm install --no-audit --no-fund
+      - name: Initialize vinext Cloudflare toolchain
+        run: npx vinext init --platform=cloudflare --skip-check
       - run: npm run typecheck
       - run: npm run build
