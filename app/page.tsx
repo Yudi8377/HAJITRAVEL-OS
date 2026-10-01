@@ -5,7 +5,7 @@ import {
 } from 'lucide-react'
 import { HaajiLogo } from '../src/components/HaajiLogo'
 import type { LucideIcon } from 'lucide-react'
-import { getPublicPackages } from '../src/data/public-catalog'
+import PublicCatalog from './PublicCatalog'
 
 const services: Array<[string,string,LucideIcon]> = [
   ['Jamaah','Profil, dokumen, visa, consent, pembayaran, dan readiness.',Users],
@@ -25,8 +25,7 @@ function Ornament() {
   return <div className="sacredOrnament" aria-hidden="true"><span/><span/><span/></div>
 }
 
-export default async function PublicHome() {
-  const packages = await getPublicPackages()
+export default function PublicHome() {
   return <main className="premiumTravel">
     <div className="topNotice"><span><Sparkles size={13}/> Premium Hajj & Umrah Journey</span><span className="topNoticeRight">Indonesia · Makkah · Madinah</span></div>
 
@@ -86,7 +85,7 @@ export default async function PublicHome() {
 
     <section id="program" className="premiumSection programSection">
       <div className="premiumSectionHead"><div><span className="sectionKicker">THE JOURNEY COLLECTION</span><h2>Find the journey<br/><em>that feels right.</em></h2></div><p>Program ditampilkan sebagai pengalaman, bukan sekadar daftar paket. Detail final berasal dari program yang dipublikasikan melalui operating system.</p></div>
-      <div className="programGrid">{packages.length===0?<div className="catalogEmpty"><ShieldCheck size={25}/><h3>Belum ada program publik.</h3><p>Program akan muncul di sini setelah diterbitkan dari operating system. Tidak ada paket demo yang disamarkan sebagai data nyata.</p><Link href="/inquire" className="goldButton">Mulai konsultasi <ArrowRight size={16}/></Link></div>:packages.slice(0,3).map((item,index)=><article className={index===0 ? "programCard programFeatured" : "programCard"} key={item.id}><div className="programImage"><span>{item.package_type==="HAJI_KHUSUS"?"HAJI KHUSUS":"UMRAH"}</span><b>{"0"+(index+1)}</b><Ornament/><div className="programImageLabel">{item.name}</div></div><div className="programBody"><div className="programMeta"><span>{item.package_code}</span><span>Published</span></div><h3>{item.name}</h3><p>Program resmi yang diterbitkan dari operating system. Detail keberangkatan, itinerary, dan layanan publik mengikuti data yang tersedia.</p><Link href={"/packages/"+item.id}>Explore journey <ChevronRight size={15}/></Link></div></article>)}</div>
+      <div className="programGrid"><PublicCatalog /></div>
     </section>
 
     <section id="experience" className="experienceBand">
