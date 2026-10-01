@@ -14,6 +14,7 @@ const modules = [
   ['Finance','Invoices & reconciliation','/finance',CircleDollarSign],
   ['Compliance','Requirements & evidence','/compliance',FileCheck2],
   ['Operations','Groups, flights & service','/operations',Activity],
+  ['Risk Center','Exceptions, SLA & evidence','/risk',TriangleAlert],
   ['Audit','Traceability & events','/audit',ShieldCheck],
 ] as const
 
