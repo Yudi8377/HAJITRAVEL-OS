@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { CalendarDays, CheckCircle2, ChevronRight, PackageCheck, Plus, ShieldCheck } from 'lucide-react'
 import { resolveAccessContext } from '../../src/access/runtime'
 import { createServerSupabaseClient } from '../../src/lib/supabase/server'
-import { createPackage, updatePackage, createDeparture, updateDeparture } from './actions'
+import { createPackage, updatePackage, createDeparture, updateDeparture, createItinerary, updateItinerary } from './actions'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -16,13 +16,15 @@ export default async function PackageControl() {
   }
 
   const sb = await createServerSupabaseClient()
-  const [{ data: packages }, { data: departures }] = await Promise.all([
+  const [{ data: packages }, { data: departures }, { data: itineraries }] = await Promise.all([
     sb.schema('operations').from('packages').select('id,package_code,package_type,name,version_no,price,currency,status,effective_from,effective_to,terms').eq('organization_id', access.organizationId).order('package_type').order('name'),
     sb.schema('operations').from('departures').select('id,package_id,departure_code,departure_date,return_date,capacity,status,notes').eq('organization_id', access.organizationId).order('departure_date'),
+    sb.from('travel_itineraries').select('id,package_id,day_no,title,description,location,sort_order,is_published').eq('organization_id', access.organizationId).order('package_id').order('sort_order').order('day_no'),
   ])
 
   const packageRows = packages ?? []
   const departureRows = departures ?? []
+  const itineraryRows = itineraries ?? []
   const money = new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0})
 
   return <div className="adminShell">
@@ -62,6 +64,20 @@ export default async function PackageControl() {
             <div className="formTwo"><label>Type<select name="package_type" defaultValue={p.package_type}><option value="UMRAH">UMRAH</option><option value="HAJI_KHUSUS">HAJI KHUSUS</option></select></label><label>Status<select name="status" defaultValue={p.status}><option>DRAFT</option><option>PUBLISHED</option><option>ARCHIVED</option></select></label></div>
             <label>Terms<textarea name="terms" rows={2} defaultValue={p.terms ?? ''}/></label><input type="hidden" name="currency" value={p.currency?.trim() || 'IDR'}/><input type="hidden" name="version_no" value={p.version_no}/><button type="submit" className="secondaryCta">Save package</button>
           </form>)}</div>
+        </section>
+        <section className="dashCard"><div className="dashHead"><div><span className="eyebrow">ITINERARY REGISTER</span><h3>Published journey content</h3></div><span className="catalogMeta">{itineraryRows.length} records</span></div>
+          <div className="packageGrid">
+            <form action={createItinerary} className="packageForm">
+              <label>Package<select name="package_id" required><option value="">Pilih package</option>{packageRows.map(p=><option key={p.id} value={p.id}>{p.package_code} · {p.name}</option>)}</select></label>
+              <div className="formTwo"><label>Day<input name="day_no" type="number" min="1" defaultValue="1"/></label><label>Sort order<input name="sort_order" type="number" min="0" defaultValue="0"/></label></div>
+              <label>Title<input name="title" placeholder="Arrival & hotel check-in" required/></label>
+              <label>Location<input name="location" placeholder="Makkah"/></label>
+              <label>Description<textarea name="description" rows={3}/></label>
+              <label className="checkLine"><input name="is_published" type="checkbox"/> Publish to public catalog</label>
+              <button type="submit" className="primaryCta">Add itinerary <ChevronRight size={15}/></button>
+            </form>
+            <div className="packageList">{itineraryRows.length===0?<div className="emptyState">Belum ada itinerary.</div>:itineraryRows.map(i=><form action={updateItinerary} className="packageRecord" key={i.id}><input type="hidden" name="id" value={i.id}/><div className="packageRecordTop"><div><b>DAY {String(i.day_no).padStart(2,'0')} · {packageRows.find(p=>p.id===i.package_id)?.package_code ?? 'PACKAGE'}</b><span>{i.is_published?'Published':'Draft content'}</span></div><strong className={'statusBadge '+(i.is_published?'published':'draft')}>{i.is_published?'PUBLIC':'DRAFT'}</strong></div><div className="formTwo"><label>Day<input name="day_no" type="number" min="1" defaultValue={i.day_no}/></label><label>Sort<input name="sort_order" type="number" min="0" defaultValue={i.sort_order}/></label></div><label>Title<input name="title" defaultValue={i.title}/></label><label>Location<input name="location" defaultValue={i.location ?? ''}/></label><label>Description<textarea name="description" rows={3} defaultValue={i.description ?? ''}/></label><label className="checkLine"><input name="is_published" type="checkbox" defaultChecked={i.is_published}/> Publish to public catalog</label><button type="submit" className="secondaryCta">Save itinerary</button></form>)}</div>
+          </div>
         </section>
         <section className="dashCard"><div className="dashHead"><div><span className="eyebrow">DEPARTURE REGISTER</span><h3>Operational departures</h3></div><span className="catalogMeta">{departureRows.length} records</span></div>
           <div className="packageList">{departureRows.length===0?<div className="emptyState">Belum ada departure. Buat planned departure di panel atas.</div>:departureRows.map(d=>{const p=packageRows.find(x=>x.id===d.package_id);return <form action={updateDeparture} className="packageRecord" key={d.id}><input type="hidden" name="id" value={d.id}/><div className="packageRecordTop"><div><b>{d.departure_code}</b><span>{p?.package_code ?? 'Unknown package'} · {d.capacity ?? '—'} pax</span></div><strong className={'statusBadge '+String(d.status).toLowerCase()}>{d.status}</strong></div><div className="formTwo"><label>Departure<input name="departure_date" type="date" defaultValue={d.departure_date}/></label><label>Return<input name="return_date" type="date" defaultValue={d.return_date ?? ''}/></label></div><div className="formTwo"><label>Capacity<input name="capacity" type="number" min="1" defaultValue={d.capacity ?? ''}/></label><label>Status<select name="status" defaultValue={d.status}><option>PLANNED</option><option>READY</option><option>CANCELLED</option><option>CLOSED</option></select></label></div><label>Notes<textarea name="notes" rows={2} defaultValue={d.notes ?? ''}/></label><button type="submit" className="secondaryCta">Save departure</button></form>})}</div>
