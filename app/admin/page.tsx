@@ -18,6 +18,7 @@ const modules = [
   ['Readiness','Documents, visa & handoff','/readiness-admin',FileCheck2],
   ['Journey','Pilgrim timeline & milestones','/journey-admin',Activity],
   ['Digital ID','Pilgrim identity & QR credential','/digital-id-admin',ShieldCheck],
+  ['Safety','Incident & guardian control','/safety-admin',ShieldAlert],
   ['Risk Center','Exceptions, SLA & evidence','/risk',TriangleAlert],
   ['Audit','Traceability & events','/audit',ShieldCheck],
 ] as const
