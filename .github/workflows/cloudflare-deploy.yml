@@ -49,8 +49,8 @@ jobs:
           for attempt in 1 2 3 4 5; do
             status=$(curl -L -sS -o /tmp/hajitravel-home.html -w "%{http_code}" --max-time 30 "$url/") || status="000"
             echo "Smoke test attempt $attempt: HTTP $status"
-            if [ "$status" = "200" ] && grep -qi "HAJI TRAVEL OS" /tmp/hajitravel-home.html; then
-              echo "Smoke test passed."
+            if [ "$status" = "200" ] && grep -qi "HAJI TRAVEL OS" /tmp/hajitravel-home.html && ! grep -qi "Application error" /tmp/hajitravel-home.html && ! grep -qi "Server Components render" /tmp/hajitravel-home.html; then
+              echo "Smoke test passed: HTTP 200, HAJI TRAVEL OS shell present, no production server-render error detected."
               exit 0
             fi
             sleep 5
