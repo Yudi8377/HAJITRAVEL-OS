@@ -58,17 +58,23 @@ export type PublicFaq = {
 }
 
 export async function getPublicPackages() {
-  const today = new Date().toISOString().slice(0, 10)
+  try {
+    const today = new Date().toISOString().slice(0, 10)
   const data = await publicRest(
     'packages',
     `select=id,package_code,package_type,name,currency,effective_from,effective_to,status&status=eq.PUBLISHED&or=(effective_from.is.null,effective_from.lte.${today})&or=(effective_to.is.null,effective_to.gte.${today})&order=package_type,name`,
     'operations',
   )
-  return (data ?? []) as PublicPackage[]
+    return (data ?? []) as PublicPackage[]
+  } catch (error) {
+    console.error('Public package catalog unavailable:', error)
+    return []
+  }
 }
 
 export async function getPublicPackage(id: string) {
-  const today = new Date().toISOString().slice(0, 10)
+  try {
+    const today = new Date().toISOString().slice(0, 10)
   const [packages, departures, itinerary] = await Promise.all([
     publicRest(
       'packages',
@@ -87,17 +93,26 @@ export async function getPublicPackage(id: string) {
   ])
   const packageRow = packages?.[0]
   if (!packageRow) return null
-  return {
-    package: packageRow as PublicPackage,
-    departures: (departures ?? []) as PublicDeparture[],
-    itinerary: (itinerary ?? []) as PublicItinerary[],
+    return {
+      package: packageRow as PublicPackage,
+      departures: (departures ?? []) as PublicDeparture[],
+      itinerary: (itinerary ?? []) as PublicItinerary[],
+    }
+  } catch (error) {
+    console.error('Public package detail unavailable:', error)
+    return null
   }
 }
 
 export async function getPublicFaqs() {
-  const data = await publicRest(
+  try {
+    const data = await publicRest(
     'travel_faq',
     'select=id,question,answer,category&is_published=eq.true&order=sort_order',
   )
-  return (data ?? []) as PublicFaq[]
+    return (data ?? []) as PublicFaq[]
+  } catch (error) {
+    console.error('Public FAQ unavailable:', error)
+    return []
+  }
 }
