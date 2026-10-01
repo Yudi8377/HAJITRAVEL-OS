@@ -8,11 +8,12 @@ import PublicCatalog from './PublicCatalog'
 const slides = [
   { kicker:'THE SACRED JOURNEY', title:'A journey worth remembering.', text:'Haji & Umrah experience yang dirancang dengan ritme yang tenang, detail yang jelas, dan dukungan yang terasa sepanjang perjalanan.', scene:'makkah', photo:'https://images.unsplash.com/photo-1693590614566-1d3ea9ef32f7?auto=format&fit=crop&w=2400&q=85', place:'Makkah Al-Mukarramah', note:'Begin with intention.' },
   { kicker:'THE HOLY CITIES', title:'Closer to what matters.', text:'Dari persiapan di Indonesia hingga momen di Tanah Suci, setiap tahap dirancang agar jamaah dapat lebih fokus pada perjalanan ibadah.', scene:'madinah', photo:'https://images.unsplash.com/photo-1745775759814-9b60ed1718ed?auto=format&fit=crop&w=2400&q=85', place:'Madinah Al-Munawwarah', note:'Move with purpose.' },
-  { kicker:'THE EXPERIENCE', title:'Beautifully arranged.', text:'Program, keberangkatan, itinerary, inquiry, dan operasional terhubung dalam satu ekosistem perjalanan yang hidup.', scene:'journey', photo:'https://images.unsplash.com/photo-1693590614566-1d3ea9ef32f7?auto=format&fit=crop&w=2400&q=85', place:'Indonesia → Saudi Arabia', note:'Every detail connected.' },
+  { kicker:'THE EXPERIENCE', title:'Beautifully arranged.', text:'Program, keberangkatan, itinerary, inquiry, dan operasional terhubung dalam satu ekosistem perjalanan yang hidup.', scene:'journey', photo:'https://images.unsplash.com/photo-1741615171144-a50cd53f4d7f?auto=format&fit=crop&w=2400&q=85', place:'Indonesia → Saudi Arabia', note:'Every detail connected.' },
 ]
 
 export default function DynamicLanding() {
   const [active, setActive] = useState(0)
+  const [menuOpen, setMenuOpen] = useState(false)
   const slide = slides[active]
   useEffect(() => { const t = window.setInterval(() => setActive(v => (v + 1) % slides.length), 6500); return () => window.clearInterval(t) }, [])
 
@@ -20,9 +21,9 @@ export default function DynamicLanding() {
     <div className="immersiveTop"><span><Sparkles size={12}/> HAJI TRAVEL OS</span><span>INDONESIA · MAKKAH · MADINAH</span></div>
     <header className="immersiveNav">
       <Link href="#top" className="brandMark"><b>HAJI</b><span>TRAVEL OS</span></Link>
-      <nav><Link href="#programs">Journeys</Link><Link href="#experience">Experience</Link><Link href="#story">How it works</Link><Link href="/faq">FAQ</Link></nav>
+      <nav><Link href="#programs" onClick={() => setMenuOpen(false)}>Journeys</Link><Link href="#experience" onClick={() => setMenuOpen(false)}>Experience</Link><Link href="#story" onClick={() => setMenuOpen(false)}>How it works</Link><Link href="/faq" onClick={() => setMenuOpen(false)}>FAQ</Link></nav>
       <Link href="/inquire" className="navAction">Plan your journey <ArrowRight size={15}/></Link>
-      <button className="navMenu" aria-label="Menu"><Menu size={21}/></button>
+      <button className="navMenu" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} onClick={() => setMenuOpen(v => !v)}><Menu size={21}/></button>
     </header>
 
     <section id="top" className="immersiveHero">
