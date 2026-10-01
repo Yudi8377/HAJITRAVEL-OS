@@ -1,14 +1,14 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import { ArrowDownRight, ArrowRight, CalendarDays, ChevronRight, Compass, Menu, ShieldCheck, Sparkles } from 'lucide-react'
 import PublicCatalog from './PublicCatalog'
 
 const slides = [
-  { kicker:'THE SACRED JOURNEY', title:'A journey worth remembering.', text:'Haji & Umrah experience yang dirancang dengan ritme yang tenang, detail yang jelas, dan dukungan yang terasa sepanjang perjalanan.', scene:'makkah', place:'Makkah Al-Mukarramah', note:'Begin with intention.' },
-  { kicker:'THE HOLY CITIES', title:'Closer to what matters.', text:'Dari persiapan di Indonesia hingga momen di Tanah Suci, setiap tahap dirancang agar jamaah dapat lebih fokus pada perjalanan ibadah.', scene:'madinah', place:'Madinah Al-Munawwarah', note:'Move with purpose.' },
-  { kicker:'THE EXPERIENCE', title:'Beautifully arranged.', text:'Program, keberangkatan, itinerary, inquiry, dan operasional terhubung dalam satu ekosistem perjalanan yang hidup.', scene:'journey', place:'Indonesia → Saudi Arabia', note:'Every detail connected.' },
+  { kicker:'THE SACRED JOURNEY', title:'A journey worth remembering.', text:'Haji & Umrah experience yang dirancang dengan ritme yang tenang, detail yang jelas, dan dukungan yang terasa sepanjang perjalanan.', scene:'makkah', photo:'https://images.unsplash.com/photo-1693590614566-1d3ea9ef32f7?auto=format&fit=crop&w=2400&q=85', place:'Makkah Al-Mukarramah', note:'Begin with intention.' },
+  { kicker:'THE HOLY CITIES', title:'Closer to what matters.', text:'Dari persiapan di Indonesia hingga momen di Tanah Suci, setiap tahap dirancang agar jamaah dapat lebih fokus pada perjalanan ibadah.', scene:'madinah', photo:'https://images.unsplash.com/photo-1745775759814-9b60ed1718ed?auto=format&fit=crop&w=2400&q=85', place:'Madinah Al-Munawwarah', note:'Move with purpose.' },
+  { kicker:'THE EXPERIENCE', title:'Beautifully arranged.', text:'Program, keberangkatan, itinerary, inquiry, dan operasional terhubung dalam satu ekosistem perjalanan yang hidup.', scene:'journey', photo:'https://images.unsplash.com/photo-1693590614566-1d3ea9ef32f7?auto=format&fit=crop&w=2400&q=85', place:'Indonesia → Saudi Arabia', note:'Every detail connected.' },
 ]
 
 export default function DynamicLanding() {
@@ -26,8 +26,8 @@ export default function DynamicLanding() {
     </header>
 
     <section id="top" className="immersiveHero">
-      <div className={'heroScene scene-' + slide.scene} key={slide.scene}>
-        <div className="sceneSky"/><div className="sceneMoon"/><div className="sceneGlow"/>
+      <div className={'heroScene scene-' + slide.scene} key={slide.scene} style={{"--hero-photo": `url(${slide.photo})`} as CSSProperties}>
+        <div className="scenePhoto"/><div className="sceneSky"/><div className="sceneMoon"/><div className="sceneGlow"/>
         <div className="sceneMosque"><i/><i/><i/><i/><b/></div><div className="sceneHorizon"/>
         <div className="sceneStars"><i/><i/><i/><i/><i/><i/><i/></div>
       </div>
@@ -55,7 +55,7 @@ export default function DynamicLanding() {
     </section>
 
     <section id="experience" className="immersiveSplit">
-      <div className="splitVisual"><div className="verticalWord">EXPERIENCE</div><div className="goldOrb"/><div className="archLight"/><div className="silhouette"><i/><i/><i/><i/></div></div>
+      <div className="splitVisual"><div className="splitPhoto"/><div className="verticalWord">EXPERIENCE</div><div className="goldOrb"/><div className="archLight"/><div className="silhouette"><i/><i/><i/><i/></div></div>
       <div className="splitCopy"><span className="eyebrow">03 · BEYOND BOOKING</span><h2>The calm of knowing<br/><em>what comes next.</em></h2><p>Jamaah melihat perjalanan yang sederhana. Tim operasional melihat readiness, dokumen, pembayaran, itinerary, departure, dan inquiry dalam satu alur yang terkontrol.</p><div className="statRail"><div><b>01</b><span>Journey planning</span></div><div><b>02</b><span>Operational visibility</span></div><div><b>03</b><span>Controlled access</span></div></div><Link href="/inquire" className="lineCta">Start a conversation <ArrowRight size={15}/></Link></div>
     </section>
 
