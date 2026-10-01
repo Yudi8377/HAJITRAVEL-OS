@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
-import { Activity, ArrowUpRight, CircleDollarSign, FileCheck2, Plane, ShieldCheck, Users, AlertTriangle, Clock3, TriangleAlert, Hotel, BusFront } from 'lucide-react'
+import { Activity, ArrowUpRight, CircleDollarSign, FileCheck2, Plane, ShieldCheck, Users, AlertTriangle, Clock3, TriangleAlert, Hotel, BusFront, Network } from 'lucide-react'
 import { HaajiLogo } from '../../src/components/HaajiLogo'
 import { getDashboardSnapshot } from '../../src/data/dashboard'
 import { resolveAccessContext } from '../../src/access/runtime'
@@ -21,6 +21,7 @@ const modules = [
   ['Safety','Incident & guardian control','/safety-admin',ShieldAlert],
   ['Risk Center','Exceptions, SLA & evidence','/risk',TriangleAlert],
   ['Audit','Traceability & events','/audit',ShieldCheck],
+  ['Enterprise Control','Cross-domain operating plane','/control-center',Network],
 ] as const
 
 export default async function Admin() {
