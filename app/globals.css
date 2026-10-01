@@ -117,7 +117,7 @@
 .primaryCta{background:#cda866;color:#102b2b;border-color:#cda866}
 .adminPage{padding:30px 42px 70px;max-width:1500px;margin:auto}
 .adminHero{position:relative;min-height:360px;overflow:hidden;background:#062525;color:#fff;display:flex;align-items:flex-end;padding:38px;box-shadow:0 25px 70px rgba(7,37,36,.15);border:1px solid #173e3a}
-.adminHeroPhoto{position:absolute;inset:-3%;background-image:url("https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?auto=format&fit=crop&w=2000&q=85");background-size:cover;background-position:center 48%;filter:saturate(.72) contrast(1.08);transform:scale(1.04)}
+.adminHeroPhoto{position:absolute;inset:-3%;background-image:url("https://upload.wikimedia.org/wikipedia/commons/5/55/Makkah_%28Mecca%29.jpg");background-size:cover;background-position:center 50%;filter:saturate(.78) contrast(1.08) brightness(.86);transform:scale(1.04)}
 .adminHeroShade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,25,26,.96) 0%,rgba(4,31,31,.83) 42%,rgba(4,31,31,.3) 74%,rgba(4,31,31,.58) 100%),linear-gradient(0deg,rgba(3,21,22,.82),transparent 55%)}
 .adminHeroContent{position:relative;z-index:2;max-width:700px}
 .adminHeroContent h2{font:500 clamp(40px,4.7vw,68px)/.94 Georgia,serif;letter-spacing:-.035em;margin:16px 0}
