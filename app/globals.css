@@ -64,3 +64,29 @@
   .mobileTravelMenu a{display:flex;align-items:center;justify-content:space-between;padding:15px 0;color:#dce5e1;font-size:11px;border-bottom:1px solid #ffffff12}
   .mobileTravelMenu a:last-child{color:var(--it-gold);border-bottom:0;font-weight:800}
 }
+
+.osMenuTrigger{border:0;background:none;color:inherit;font:inherit;display:inline-flex;align-items:center;gap:7px;cursor:pointer;padding:8px 2px}
+.osMenuPanel{position:fixed;z-index:120;top:86px;right:4vw;width:min(920px,92vw);max-height:calc(100vh - 110px);overflow:auto;background:rgba(5,27,29,.97);border:1px solid rgba(255,255,255,.12);box-shadow:0 30px 80px rgba(0,0,0,.45);backdrop-filter:blur(24px);padding:30px}
+.osMenuIntro{max-width:560px;padding-bottom:20px}
+.osMenuIntro h3{font-size:clamp(24px,3vw,38px);line-height:1.05;margin:7px 0 8px}
+.osMenuIntro p{margin:0;color:rgba(255,255,255,.62);font-size:13px}
+.osMenuGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid rgba(255,255,255,.1)}
+.osMenuGrid a{display:flex;align-items:center;gap:13px;padding:16px 8px;border-bottom:1px solid rgba(255,255,255,.08);color:#f2f5f0}
+.osMenuGrid a:nth-child(odd){border-right:1px solid rgba(255,255,255,.08);padding-right:18px}
+.osMenuGrid a:nth-child(even){padding-left:18px}
+.osMenuGrid a:hover{background:rgba(255,255,255,.035)}
+.osIcon{width:34px;height:34px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.12);border-radius:50%;color:var(--it-gold)}
+.osMenuGrid a>span:nth-child(2){display:flex;flex-direction:column;gap:3px;flex:1}
+.osMenuGrid b{font-size:13px}
+.osMenuGrid small{font-size:10px;color:rgba(255,255,255,.5)}
+.osMenuFooter{display:flex;gap:22px;padding-top:20px}
+.osMenuFooter a{display:inline-flex;align-items:center;gap:7px;color:var(--it-gold);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+@media(max-width:900px){
+ .osMenuPanel{top:78px;left:0;right:0;width:auto;max-height:calc(100vh - 78px);padding:22px 20px 28px}
+ .osMenuGrid{grid-template-columns:1fr}
+ .osMenuGrid a:nth-child(odd){border-right:0;padding-right:8px}
+ .osMenuGrid a:nth-child(even){padding-left:8px}
+ .osMenuFooter{flex-direction:column;gap:14px}
+ .immersiveNav nav .osMenuTrigger{display:none}
+}
+@media(min-width:901px){.navMenu{display:none!important}}
