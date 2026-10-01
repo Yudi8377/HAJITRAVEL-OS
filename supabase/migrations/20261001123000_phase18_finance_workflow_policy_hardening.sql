@@ -35,7 +35,7 @@ create policy "finance_payment_insert"
       from organization.organization_memberships m
       join organization.role_capabilities rc on rc.role_id = m.role_id
       join organization.capabilities c on c.id = rc.capability_id
-      where m.organization_id = organization_id
+      where m.organization_id = payments.organization_id
         and m.user_id = checker_user_id
         and m.status = 'ACTIVE'
         and c.code = 'finance.check'
