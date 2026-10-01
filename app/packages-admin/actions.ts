@@ -106,3 +106,43 @@ export async function updateDeparture(formData: FormData) {
   revalidatePath('/packages-admin')
   revalidatePath('/packages')
 }
+
+export async function createItinerary(formData: FormData) {
+  const access = await requireCapability('package.update')
+  const sb = await createServerSupabaseClient()
+  const packageId = textValue(formData, 'package_id')
+  const title = textValue(formData, 'title')
+  if (!packageId || !title) throw new Error('INVALID_ITINERARY')
+  const { data: pkg, error: packageError } = await sb.schema('operations').from('packages').select('id').eq('id', packageId).eq('organization_id', access.organizationId).single()
+  if (packageError || !pkg) throw new Error('PACKAGE_NOT_FOUND')
+  const { error } = await sb.from('travel_itineraries').insert({
+    organization_id: access.organizationId,
+    package_id: packageId,
+    day_no: Math.max(1, Number(formData.get('day_no') || 1)),
+    title,
+    description: textValue(formData, 'description') || null,
+    location: textValue(formData, 'location') || null,
+    sort_order: Math.max(0, Number(formData.get('sort_order') || 0)),
+    is_published: formData.get('is_published') === 'on',
+  })
+  if (error) throw new Error(error.message)
+  revalidatePath('/packages-admin')
+  revalidatePath('/packages')
+}
+export async function updateItinerary(formData: FormData) {
+  const access = await requireCapability('package.update')
+  const sb = await createServerSupabaseClient()
+  const id = textValue(formData, 'id')
+  if (!id) throw new Error('INVALID_ITINERARY_ID')
+  const { error } = await sb.from('travel_itineraries').update({
+    day_no: Math.max(1, Number(formData.get('day_no') || 1)),
+    title: textValue(formData, 'title'),
+    description: textValue(formData, 'description') || null,
+    location: textValue(formData, 'location') || null,
+    sort_order: Math.max(0, Number(formData.get('sort_order') || 0)),
+    is_published: formData.get('is_published') === 'on',
+  }).eq('id', id)
+  if (error) throw new Error(error.message)
+  revalidatePath('/packages-admin')
+  revalidatePath('/packages')
+}
