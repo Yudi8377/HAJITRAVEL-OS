@@ -79,6 +79,8 @@ export async function getDashboardSnapshot(): Promise<DashboardSnapshot> {
   const openReviews = (reviews.data ?? []).filter((row:any)=>['OPEN','GAP','REVIEW_REQUIRED'].includes(row.status)).length
   const invoiceAttention = (invoices.data ?? []).filter((row:any)=>['ISSUED','PARTIAL','OVERDUE'].includes(row.status)).length
   const incidentAttention = (cases.data ?? []).length
+  const actionRows:any[] = actions.data ?? []
+  const actionByDeparture = new Map(actionRows.map((row:any)=>[row.departure_id,row]))
   const upcoming: DashboardDeparture[] = departureRows.map((departure:any)=>{
     const departureGroups=(groups.data ?? []).filter((group:any)=>group.departure_id===departure.id)
     const departureGroupIds=new Set(departureGroups.map((group:any)=>group.id))
@@ -92,8 +94,6 @@ export async function getDashboardSnapshot(): Promise<DashboardSnapshot> {
   const readinessValues:number[]=upcoming.map((item:DashboardDeparture)=>item.readiness).filter((value):value is number=>value!==null)
   const controlData:any = control.data ?? snapshot.data ?? null
   const slaData:any = sla.data ?? null
-  const actionRows:any[] = actions.data ?? []
-  const actionByDeparture = new Map(actionRows.map((row:any)=>[row.departure_id,row]))
   const actionQueue = actionRows.map((row:any)=>({departureId:row.departure_id,departureCode:row.departure_code,departureDate:row.departure_date,priority:row.predictive_priority ?? row.governance_state ?? 'WATCH',riskScore:Number(row.predictive_risk_score ?? 0),driver:row.primary_risk_driver ?? null,focus:row.recommended_focus ?? null,blockers:Number(row.blockers_count ?? 0)}))
   const executive:any = control.data ?? snapshot.data ?? null
   const snapshotData:any = snapshot.data ?? null
