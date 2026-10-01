@@ -13,6 +13,6 @@ export async function createPayment(f:FormData){
  const {data:inv,error:ie}=await sb.schema('finance').from('invoices').select('id,jamaah_id').eq('id',v(f,'invoice_id')).eq('organization_id',a.organizationId).single()
  if(ie||!inv) throw new Error('INVOICE_NOT_FOUND')
  const checker=v(f,'checker_user_id')
- const {error}=await sb.schema('finance').from('payments').insert({organization_id:a.organizationId,invoice_id:inv.id,amount:Number(f.get('amount')||0),channel:v(f,'channel')||null,status:'PENDING',checker_user_id:checker,maker_user_id:a.userId})
+ const {error}=await sb.schema('finance').from('payments').insert({organization_id:a.organizationId,invoice_id:inv.id,amount:Number(f.get('amount')||0),channel:v(f,'channel')||null,status:'PENDING' ,checker_user_id:checker,maker_user_id:a.userId})
  if(error) throw new Error(error.message);revalidatePath('/finance');revalidatePath('/admin')
 }
