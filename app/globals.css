@@ -57,3 +57,10 @@
 .splitVisual>*:not(.splitPhoto){z-index:2}
 @keyframes photoDrift{from{transform:scale(1.045) translate3d(-.7%,0,0)}to{transform:scale(1.1) translate3d(.7%,-.8%,0)}}
 @media(prefers-reduced-motion:reduce){.scenePhoto{animation:none}}
+
+.mobileTravelMenu{display:none}
+@media(max-width:900px){
+  .mobileTravelMenu{display:flex;position:fixed;top:96px;left:0;right:0;z-index:99;flex-direction:column;background:#041c1ef5;border-top:1px solid #ffffff18;border-bottom:1px solid #ffffff18;padding:10px 24px 18px;backdrop-filter:blur(16px);box-shadow:0 20px 50px #0007}
+  .mobileTravelMenu a{display:flex;align-items:center;justify-content:space-between;padding:15px 0;color:#dce5e1;font-size:11px;border-bottom:1px solid #ffffff12}
+  .mobileTravelMenu a:last-child{color:var(--it-gold);border-bottom:0;font-weight:800}
+}
