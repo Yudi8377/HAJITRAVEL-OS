@@ -17,6 +17,7 @@ const modules = [
   ['Journey Control','Flights, hotels & transport','/operations-admin',Hotel],
   ['Readiness','Documents, visa & handoff','/readiness-admin',FileCheck2],
   ['Journey','Pilgrim timeline & milestones','/journey-admin',Activity],
+  ['Digital ID','Pilgrim identity & QR credential','/digital-id-admin',ShieldCheck],
   ['Risk Center','Exceptions, SLA & evidence','/risk',TriangleAlert],
   ['Audit','Traceability & events','/audit',ShieldCheck],
 ] as const
