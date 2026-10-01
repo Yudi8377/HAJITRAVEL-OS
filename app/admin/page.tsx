@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
-import { Activity, ArrowUpRight, CircleDollarSign, FileCheck2, Plane, ShieldCheck, Users, AlertTriangle } from 'lucide-react'
+import { Activity, ArrowUpRight, CircleDollarSign, FileCheck2, Plane, ShieldCheck, Users, AlertTriangle, Clock3, TriangleAlert } from 'lucide-react'
 import { HaajiLogo } from '../../src/components/HaajiLogo'
 import { getDashboardSnapshot } from '../../src/data/dashboard'
 import { resolveAccessContext } from '../../src/access/runtime'
@@ -68,6 +68,14 @@ export default async function Admin() {
             <div><span className="eyebrow">EXECUTIVE CONTROL TOWER</span><b>Departure readiness at a glance</b><small>Prioritaskan keberangkatan yang membutuhkan tindakan sebelum handoff operasional.</small></div>
             <div className="towerLegend"><span><i className="towerDot ready"/> READY</span><span><i className="towerDot watch"/> WATCH</span><span><i className="towerDot risk"/> ACTION</span></div>
           </section>
+          <section className="executiveBar">
+            <div><span className="eyebrow">PORTFOLIO CONTROL</span><b>{data.executiveState ?? data.portfolioState ?? 'CONTROLLED'}</b><small>{data.portfolioHealth == null ? 'Belum ada portfolio score.' : `Portfolio health ${data.portfolioHealth}%`}</small></div>
+            <Metric label="P1 Critical" value={data.executive.critical} icon={TriangleAlert}/>
+            <Metric label="P2 High" value={data.executive.high} icon={AlertTriangle}/>
+            <Metric label="SLA Overdue" value={data.executive.overdue} icon={Clock3}/>
+            <Metric label="Due < 4h" value={data.executive.due4h} icon={Clock3}/>
+            <Metric label="Data quality" value={data.executive.dataQuality} icon={ShieldCheck}/>
+          </section>
           <div className="dashboardGrid">
             <section className="dashCard large">
               <div className="dashHead"><div><span className="eyebrow">DEPARTURES</span><h3>Upcoming departures</h3></div><Link href="/operations">View all <ArrowUpRight size={15}/></Link></div>
@@ -81,6 +89,10 @@ export default async function Admin() {
               <div className="dashHead"><div><span className="eyebrow">RECENT ACTIVITY</span><h3>Audit stream</h3></div><Link href="/audit">Open <ArrowUpRight size={15}/></Link></div>
               {data.audit.length === 0 ? <Empty label="Belum ada audit event." /> : <div className="activity">{data.audit.map(event => <p key={event.id}><b>{event.action}</b> <span>{event.entity || 'system'}</span></p>)}</div>}
             </section>
+            <section className="dashCard actionQueueCard">
+              <div className="dashHead"><div><span className="eyebrow">EXECUTIVE ACTION QUEUE</span><h3>Prioritas tindakan</h3></div><Link href="/operations">Open <ArrowUpRight size={15}/></Link></div>
+              {data.actionQueue.length === 0 ? <Empty label="Belum ada action queue aktif." /> : <div className="actionQueue">{data.actionQueue.map(item => <div className="queueItem" key={item.departureId}><div><b>{item.departureCode}</b><span>{item.departureDate} · {item.driver ?? 'Operational control'}</span><small>{item.focus ?? 'Review departure control state'}</small></div><strong className={item.riskScore >= 80 ? 'risk' : item.riskScore >= 50 ? 'watch' : 'ready'}>{item.priority}<i>{item.riskScore}</i></strong></div>)}</div>}
+            </section>
             <section className="dashCard moduleCard">
               <div className="dashHead"><div><span className="eyebrow">WORKSPACES</span><h3>Go to module</h3></div></div>
               <div className="moduleTiles">{modules.map(([name,desc,href,Icon]) => <Link href={href} key={name}><Icon size={18}/><div><b>{name}</b><span>{desc}</span></div><ArrowUpRight size={14}/></Link>)}</div>
@@ -92,6 +104,7 @@ export default async function Admin() {
   )
 }
 function Kpi({label,value,note}:{label:string,value:string,note:string}) { return <div className="kpi"><span>{label}</span><b>{value}</b><small>{note}</small></div> }
+function Metric({label,value,icon:Icon}:{label:string,value:number,icon:typeof ShieldCheck}) { return <div className="towerMetric"><Icon size={15}/><span>{label}</span><b>{value}</b></div> }
 function Action({title,sub}:{title:string,sub:string}) { return <div className="action"><span><b>{title}</b><small>{sub}</small></span><ArrowUpRight size={14}/></div> }
 function Empty({label}:{label:string}) { return <div className="emptyState">{label}</div> }
 function AccessDenied({role}:{role:string|null}) {
