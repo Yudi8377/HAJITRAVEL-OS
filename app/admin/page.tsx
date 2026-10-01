@@ -1,10 +1,12 @@
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 import { Activity, ArrowUpRight, CircleDollarSign, FileCheck2, Plane, ShieldCheck, Users, AlertTriangle } from 'lucide-react'
 import { HaajiLogo } from '../../src/components/HaajiLogo'
 import { getDashboardSnapshot } from '../../src/data/dashboard'
+import { resolveAccessContext } from '../../src/access/runtime'
 
 const modules = [
   ['Jamaah','Profiles, documents & consent','/jamaah',Users],
@@ -16,6 +18,11 @@ const modules = [
 ] as const
 
 export default async function Admin() {
+  const access = await resolveAccessContext()
+  if (!access.authenticated) redirect('/login?next=/admin')
+  if (!access.organizationId || !access.capabilities.includes('reports.read')) {
+    return <AccessDenied role={access.role} />
+  }
   const data = await getDashboardSnapshot()
   const money = new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0})
   return (
@@ -68,3 +75,6 @@ export default async function Admin() {
 function Kpi({label,value,note}:{label:string,value:string,note:string}) { return <div className="kpi"><span>{label}</span><b>{value}</b><small>{note}</small></div> }
 function Action({title,sub}:{title:string,sub:string}) { return <div className="action"><span><b>{title}</b><small>{sub}</small></span><ArrowUpRight size={14}/></div> }
 function Empty({label}:{label:string}) { return <div className="emptyState">{label}</div> }
+function AccessDenied({role}:{role:string|null}) {
+  return <main style={{minHeight:'100vh',display:'grid',placeItems:'center',padding:32}}><section className="dashCard" style={{maxWidth:620,width:'100%'}}><span className="eyebrow">ACCESS CONTROL</span><h1>Akses control center tidak tersedia</h1><p>Akun ini belum memiliki organization scope aktif atau capability <b>reports.read</b>.</p><p>Role saat ini: <b>{role ?? '—'}</b></p><Link href="/login?next=/admin" className="primaryCta">Kembali ke login</Link></section></main>
+}
