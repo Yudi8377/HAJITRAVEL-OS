@@ -10,7 +10,7 @@ import { resolveAccessContext } from '../../src/access/runtime'
 
 const modules = [
   ['Jamaah','Profiles, documents & consent','/jamaah',Users],
-  ['Packages','Products & departure plans','/packages',Plane],
+  ['Packages','Products & departure plans','/packages-admin',Plane],
   ['Finance','Invoices & reconciliation','/finance',CircleDollarSign],
   ['Compliance','Requirements & evidence','/compliance',FileCheck2],
   ['Operations','Groups, flights & service','/operations',Activity],
