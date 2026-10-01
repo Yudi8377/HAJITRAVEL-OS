@@ -90,3 +90,68 @@
  .immersiveNav nav .osMenuTrigger{display:none}
 }
 @media(min-width:901px){.navMenu{display:none!important}}
+
+
+/* =========================================================
+   HAJITRAVEL OS — PREMIUM CONTROL ROOM
+   ========================================================= */
+.adminShell{min-height:100vh;display:grid;grid-template-columns:250px 1fr;background:#f3f0e7;color:#102b2b}
+.adminSide{position:sticky;top:0;height:100vh;background:linear-gradient(180deg,#061f20 0%,#082d2c 62%,#05191a 100%);color:#fff;padding:28px 20px;display:flex;flex-direction:column;box-shadow:18px 0 50px rgba(3,28,28,.12);z-index:20}
+.adminSide .siteLogo,.adminSide .siteLogoLight{color:#fff!important}
+.orgBadge{margin:30px 0 22px;padding:15px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035)}
+.orgBadge small{display:block;font-size:7px;letter-spacing:.18em;color:#8ea7a0}
+.orgBadge b{display:block;margin-top:8px;font:17px Georgia,serif;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.orgBadge span{display:block;margin-top:6px;font-size:8px;color:#9bb0aa}
+.adminSide nav{display:grid;gap:5px}
+.adminSide nav a{display:flex;align-items:center;gap:11px;padding:11px 12px;color:#a9bbb6;font-size:10px;border:1px solid transparent;transition:.2s ease}
+.adminSide nav a:hover{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.08);color:#fff;transform:translateX(3px)}
+.adminSide nav a svg{color:#d5b36d}
+.sideBottom{margin-top:auto;border-top:1px solid rgba(255,255,255,.1);padding:16px 4px 0;color:#829992;font-size:8px;letter-spacing:.08em;display:flex;align-items:center;gap:7px}
+.adminMain{min-width:0}
+.adminHeader{height:82px;background:rgba(255,253,248,.9);backdrop-filter:blur(14px);border-bottom:1px solid #dedbd1;padding:0 42px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:15}
+.adminHeader h1{margin:5px 0 0;font:28px Georgia,serif;letter-spacing:-.02em}
+.adminActions{display:flex;align-items:center;gap:12px;font-size:8px;letter-spacing:.16em;color:#7b8884}
+.liveDot{width:7px;height:7px;border-radius:50%;background:#4b9a73;box-shadow:0 0 0 4px #4b9a7320}
+.publicButton,.primaryCta{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid #cfcfc4;padding:10px 13px;font-size:9px;font-weight:800}
+.publicButton{background:#fff;color:#183a37}
+.primaryCta{background:#cda866;color:#102b2b;border-color:#cda866}
+.adminPage{padding:30px 42px 70px;max-width:1500px;margin:auto}
+.adminHero{position:relative;min-height:360px;overflow:hidden;background:#062525;color:#fff;display:flex;align-items:flex-end;padding:38px;box-shadow:0 25px 70px rgba(7,37,36,.15);border:1px solid #173e3a}
+.adminHeroPhoto{position:absolute;inset:-3%;background-image:url("https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?auto=format&fit=crop&w=2000&q=85");background-size:cover;background-position:center 48%;filter:saturate(.72) contrast(1.08);transform:scale(1.04)}
+.adminHeroShade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,25,26,.96) 0%,rgba(4,31,31,.83) 42%,rgba(4,31,31,.3) 74%,rgba(4,31,31,.58) 100%),linear-gradient(0deg,rgba(3,21,22,.82),transparent 55%)}
+.adminHeroContent{position:relative;z-index:2;max-width:700px}
+.adminHeroContent h2{font:500 clamp(40px,4.7vw,68px)/.94 Georgia,serif;letter-spacing:-.035em;margin:16px 0}
+.adminHeroContent h2 em{color:#e3c584;font-style:italic}
+.adminHeroContent p{font-size:11px;line-height:1.9;color:#bdcbc7;max-width:600px;margin:0}
+.adminHeroMeta{display:flex;gap:16px;flex-wrap:wrap;margin-top:22px}
+.adminHeroMeta span{display:inline-flex;align-items:center;gap:6px;color:#d4ddd9;font-size:8px;letter-spacing:.08em;padding:7px 10px;border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.14)}
+.adminHeroMeta svg{color:#d5b36d}
+.adminHeroStamp{position:absolute;z-index:2;right:28px;top:28px;width:180px;padding:15px;border:1px solid rgba(213,179,109,.45);background:rgba(3,25,26,.42);backdrop-filter:blur(10px)}
+.adminHeroStamp small{display:block;color:#d5b36d;font-size:6px;letter-spacing:.2em}
+.adminHeroStamp b{display:block;color:#fff;font:16px Georgia,serif;line-height:1.05;margin:9px 0}
+.adminHeroStamp span{font-size:7px;color:#9db1aa;letter-spacing:.14em}
+.welcome{display:flex;justify-content:space-between;align-items:end;gap:30px;margin:34px 0 22px}
+.welcome h2{font:500 34px Georgia,serif;margin:9px 0 4px;letter-spacing:-.02em}
+.welcome h2 em{color:#a98046;font-style:italic}
+.welcome p{font-size:10px;color:#7a8884;margin:0}
+.kpiGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.kpi{background:#fffdf8;border:1px solid #dddcd3;padding:20px;box-shadow:0 12px 35px rgba(20,49,45,.04)}
+.kpi span{display:block;font-size:8px;color:#7c8b86;letter-spacing:.12em}
+.kpi b{display:block;font:29px Georgia,serif;margin:10px 0 6px;color:#0d3432}
+.kpi small{font-size:8px;color:#a18a61}
+.dashboardGrid{display:grid;grid-template-columns:1.35fr 1fr;gap:16px}
+.dashCard{background:#fffdf8;border:1px solid #deddd5;padding:22px;box-shadow:0 15px 45px rgba(20,49,45,.035)}
+.dashCard.large{min-height:250px}
+.dashHead{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;border-bottom:1px solid #e4e2da;padding-bottom:14px;margin-bottom:14px}
+.dashHead h3{font:22px Georgia,serif;margin:7px 0 0}
+.dashHead>a{font-size:9px;color:#9c7b46;display:flex;align-items:center;gap:4px}
+.departureList{display:grid;gap:7px}
+.departure{display:flex;align-items:center;justify-content:space-between;padding:13px 12px;background:#f6f3eb;border:1px solid #ebe8de}
+.depInfo b{display:block;font-size:10px}.depInfo span{display:block;font-size:8px;color:#8a9691;margin-top:4px}
+.depStatus{font-size:7px;letter-spacing:.12em;color:#8f7040;border:1px solid #dbc99f;padding:6px 8px}
+.attention{display:grid;gap:7px}.action{display:flex;justify-content:space-between;align-items:center;padding:12px;background:#f6f3eb}.action b{display:block;font-size:9px}.action small{display:block;font-size:7px;color:#8b9792;margin-top:4px}.action svg{color:#b38a4c}
+.activity{display:grid;gap:8px}.activity p{margin:0;padding:10px;background:#f6f3eb;font-size:8px}.activity p span{color:#8a9691;margin-left:5px}
+.moduleCard{grid-column:1/-1}.moduleTiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.moduleTiles a{display:flex;align-items:center;gap:10px;padding:14px;background:#f6f3eb;border:1px solid #e7e3d8;transition:.2s}.moduleTiles a:hover{background:#efe9dc;transform:translateY(-2px)}.moduleTiles svg{color:#ad8243}.moduleTiles div{flex:1}.moduleTiles b{display:block;font-size:9px}.moduleTiles span{display:block;font-size:7px;color:#8c9893;margin-top:3px}
+.emptyState{padding:35px 10px;text-align:center;color:#8b9691;font-size:9px}
+@media(max-width:1050px){.adminShell{grid-template-columns:205px}.adminPage{padding:25px}.adminHeader{padding:0 25px}.dashboardGrid{grid-template-columns:1fr}.kpiGrid{grid-template-columns:repeat(2,1fr)}.moduleTiles{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.adminShell{display:block}.adminSide{position:relative;height:auto;padding:18px 20px}.adminSide nav{grid-template-columns:repeat(3,1fr);margin-top:12px}.sideBottom{display:none}.orgBadge{margin:18px 0 8px}.adminHeader{height:auto;min-height:78px;padding:15px 20px}.adminHeader h1{font-size:22px}.adminActions{gap:8px}.adminPage{padding:18px 16px 50px}.adminHero{min-height:470px;padding:24px}.adminHeroStamp{right:18px;top:18px;width:150px}.adminHeroContent h2{font-size:43px}.welcome{display:block}.welcome .primaryCta{margin-top:18px}.kpiGrid{grid-template-columns:1fr 1fr}.moduleTiles{grid-template-columns:1fr}.adminSide nav a{justify-content:center;flex-direction:column;gap:5px;padding:9px 4px;font-size:7px}.adminSide nav a span{display:block}.adminHeroMeta{display:grid;gap:6px}.adminHeroMeta span{font-size:7px}}
