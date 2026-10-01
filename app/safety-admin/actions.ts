@@ -1,0 +1,8 @@
+'use server'
+import { randomBytes } from 'node:crypto'
+import { revalidatePath } from 'next/cache'
+import { requireCapability } from '../../src/access/runtime'
+import { createServerSupabaseClient } from '../../src/lib/supabase/server'
+const v=(f:FormData,k:string)=>String(f.get(k)??'').trim()
+export async function createIncident(f:FormData){const a=await requireCapability('safety.create');const s=await createServerSupabaseClient();const no='INC-'+new Date().toISOString().slice(0,10).replaceAll('-','')+'-'+randomBytes(3).toString('hex').toUpperCase();const registration_id=v(f,'registration_id')||null;const {error}=await s.schema('safety').from('incidents').insert({organization_id:a.organizationId,incident_no:no,registration_id,departure_id:v(f,'departure_id')||null,incident_type:v(f,'incident_type'),severity:v(f,'severity'),summary:v(f,'summary'),details:v(f,'details'),location_label:v(f,'location_label'),reported_by:a.userId});if(error)throw new Error(error.message);revalidatePath('/safety-admin')}
+export async function updateIncident(f:FormData){const a=await requireCapability('safety.update');const s=await createServerSupabaseClient();const id=v(f,'id');const status=v(f,'status');const patch:any={status,guardian_contacted:f.get('guardian_contacted')==='on',emergency_services_contacted:f.get('emergency_services_contacted')==='on',details:v(f,'details'),updated_at:new Date().toISOString()};if(status==='RESOLVED')patch.resolved_at=new Date().toISOString();if(status==='CLOSED')patch.closed_at=new Date().toISOString();const {error}=await s.schema('safety').from('incidents').update(patch).eq('id',id).eq('organization_id',a.organizationId);if(error)throw new Error(error.message);revalidatePath('/safety-admin')}
