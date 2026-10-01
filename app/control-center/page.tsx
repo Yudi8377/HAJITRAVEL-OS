@@ -16,7 +16,7 @@ export default async function ControlCenter() {
 
   const sb = await createServerSupabaseClient()
   const org = access.organizationId
-  const [health, procurement, suppliers, hr, grc, regulatory, ai, bi, integrations, controlItems, invoices, payments, incidents] = await Promise.all([
+  const [health, procurement, suppliers, hr, grc, regulatory, ai, bi, integrations, controlItems, invoices, payments, incidents, audit] = await Promise.all([
     sb.schema('health').from('signals').select('id,status,severity').eq('organization_id', org),
     sb.schema('procurement').from('purchase_requests').select('id,status,amount').eq('organization_id', org),
     sb.schema('supplier').from('suppliers').select('id,status,risk_level').eq('organization_id', org),
@@ -26,12 +26,13 @@ export default async function ControlCenter() {
     sb.schema('ai').from('agent_runs').select('id,status,policy_gate,confidence').eq('organization_id', org),
     sb.schema('bi').from('metric_snapshots').select('id,quality_status').eq('organization_id', org),
     sb.schema('integration').from('endpoint_registry').select('id,status').eq('organization_id', org),
-    sb.schema('operations').from('enterprise_control_items').select('id,state,priority,title,due_at').eq('organization_id', org).order('due_at',{ascending:true}).limit(12),
+    sb.schema('operations').from('enterprise_control_items').select('id,domain,source_table,source_id,state,priority,title,detail,due_at,owner_user_id,evidence_uri').eq('organization_id', org).order('due_at',{ascending:true}).limit(12),
     sb.schema('finance').from('invoices').select('id,amount,status').eq('organization_id', org),
     sb.schema('finance').from('payments').select('id,amount,status').eq('organization_id', org),
-    sb.schema('safety').from('incidents').select('id,status,severity').eq('organization_id', org)
+    sb.schema('safety').from('incidents').select('id,status,severity').eq('organization_id', org),
+    sb.schema('audit').from('events').select('id,action,entity_schema,entity_table,event_at').eq('organization_id', org).order('event_at',{ascending:false}).limit(8)
   ])
-  const errors = [health,procurement,suppliers,hr,grc,regulatory,ai,bi,integrations,controlItems,invoices,payments,incidents].filter(x=>x.error)
+  const errors = [health,procurement,suppliers,hr,grc,regulatory,ai,bi,integrations,controlItems,invoices,payments,incidents,audit].filter(x=>x.error)
   if (errors.length) throw errors[0].error
 
   const count = (x:any[]) => x.length
@@ -81,6 +82,11 @@ export default async function ControlCenter() {
         </div>
       </section>
     </div>
+
+    <section className="dashCard" style={{marginTop:14}}>
+      <div className="dashHead"><div><span className="eyebrow">AUDIT STREAM</span><h3>Cross-domain trace</h3></div><Link href="/audit">Open audit <ArrowUpRight size={14}/></Link></div>
+      {(audit.data??[]).length===0 ? <div className="emptyState">Belum ada audit event lintas domain.</div> : <div className="activity">{(audit.data??[]).map((x:any)=><p key={x.id}><b>{x.action}</b> <span>{x.entity_schema && x.entity_table ? x.entity_schema+'.'+x.entity_table : 'system'}</span> <small>{x.event_at?new Date(x.event_at).toLocaleString('id-ID'):''}</small></p>)}</div>}
+    </section>
 
     <section className="dashCard" style={{marginTop:14}}>
       <div className="dashHead"><div><span className="eyebrow">OPERATING PRINCIPLES</span><h3>Guardrails active</h3></div></div>
