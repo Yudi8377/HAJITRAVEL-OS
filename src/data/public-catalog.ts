@@ -1,4 +1,27 @@
-import { createServerSupabaseClient } from '../lib/supabase/server'
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+
+function restUrl(path: string, query: string) {
+  if (!SUPABASE_URL || !SUPABASE_KEY) throw new Error('HAJITRAVEL Supabase target is not configured.')
+  return `${SUPABASE_URL}/rest/v1/${path}?${query}`
+}
+
+async function publicRest(path: string, query: string, profile?: string) {
+  const response = await fetch(restUrl(path, query), {
+    headers: {
+      apikey: SUPABASE_KEY!,
+      Authorization: `Bearer ${SUPABASE_KEY!}`,
+      Accept: 'application/json',
+      ...(profile ? { 'Accept-Profile': profile } : {}),
+    },
+    cache: 'no-store',
+  })
+  if (!response.ok) {
+    const detail = await response.text()
+    throw new Error(`Public catalog request failed (${response.status}): ${detail.slice(0, 500)}`)
+  }
+  return response.json()
+}
 
 export type PublicPackage = {
   id: string
@@ -35,47 +58,46 @@ export type PublicFaq = {
 }
 
 export async function getPublicPackages() {
-  const sb = await createServerSupabaseClient()
-  const { data, error } = await sb.schema('operations').from('packages')
-    .select('id,package_code,package_type,name,currency,effective_from,effective_to,status')
-    .eq('status', 'PUBLISHED')
-    .or('effective_from.is.null,effective_from.lte.' + new Date().toISOString().slice(0, 10))
-    .or('effective_to.is.null,effective_to.gte.' + new Date().toISOString().slice(0, 10))
-    .order('package_type').order('name')
-  if (error) throw error
+  const today = new Date().toISOString().slice(0, 10)
+  const data = await publicRest(
+    'packages',
+    `select=id,package_code,package_type,name,currency,effective_from,effective_to,status&status=eq.PUBLISHED&or=(effective_from.is.null,effective_from.lte.${today})&or=(effective_to.is.null,effective_to.gte.${today})&order=package_type,name`,
+    'operations',
+  )
   return (data ?? []) as PublicPackage[]
 }
 
 export async function getPublicPackage(id: string) {
-  const sb = await createServerSupabaseClient()
-  const { data: packageRow, error: packageError } = await sb.schema('operations').from('packages')
-    .select('id,package_code,package_type,name,currency,effective_from,effective_to,status')
-    .eq('id', id).eq('status', 'PUBLISHED').single()
-  if (packageError) return null
-
-  const [{ data: departures, error: departureError }, { data: itinerary, error: itineraryError }] = await Promise.all([
-    sb.schema('operations').from('departures')
-      .select('id,package_id,departure_code,departure_date,return_date,capacity,status')
-      .eq('package_id', id).in('status', ['PLANNED', 'READY']).order('departure_date'),
-    sb.from('travel_itineraries')
-      .select('id,package_id,day_no,title,description,location')
-      .eq('package_id', id).eq('is_published', true).order('sort_order').order('day_no')
+  const today = new Date().toISOString().slice(0, 10)
+  const [packages, departures, itinerary] = await Promise.all([
+    publicRest(
+      'packages',
+      `select=id,package_code,package_type,name,currency,effective_from,effective_to,status&id=eq.${encodeURIComponent(id)}&status=eq.PUBLISHED&or=(effective_from.is.null,effective_from.lte.${today})&or=(effective_to.is.null,effective_to.gte.${today})`,
+      'operations',
+    ),
+    publicRest(
+      'departures',
+      `select=id,package_id,departure_code,departure_date,return_date,capacity,status&package_id=eq.${encodeURIComponent(id)}&in=status.(PLANNED,READY)&order=departure_date`,
+      'operations',
+    ),
+    publicRest(
+      'travel_itineraries',
+      `select=id,package_id,day_no,title,description,location&package_id=eq.${encodeURIComponent(id)}&is_published=eq.true&order=sort_order,day_no`,
+    ),
   ])
-  if (departureError) throw departureError
-  if (itineraryError) throw itineraryError
+  const packageRow = packages?.[0]
+  if (!packageRow) return null
   return {
     package: packageRow as PublicPackage,
     departures: (departures ?? []) as PublicDeparture[],
-    itinerary: (itinerary ?? []) as PublicItinerary[]
+    itinerary: (itinerary ?? []) as PublicItinerary[],
   }
 }
 
 export async function getPublicFaqs() {
-  const sb = await createServerSupabaseClient()
-  const { data, error } = await sb.from('travel_faq')
-    .select('id,question,answer,category')
-    .eq('is_published', true)
-    .order('sort_order')
-  if (error) throw error
+  const data = await publicRest(
+    'travel_faq',
+    'select=id,question,answer,category&is_published=eq.true&order=sort_order',
+  )
   return (data ?? []) as PublicFaq[]
 }
