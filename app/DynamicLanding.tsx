@@ -2,12 +2,8 @@
 
 import Link from 'next/link'
 import { useEffect, useState, type CSSProperties } from 'react'
-import { ArrowDownRight, ArrowRight, Compass, Menu, ShieldCheck, Sparkles, X, ChevronRight, Building2, UsersRound, PlaneTakeoff, ClipboardCheck, WalletCards, AlertTriangle, LockKeyhole, ScrollText, FileText } from 'lucide-react'
+import { ArrowDownRight, ArrowRight, Compass, Sparkles } from 'lucide-react'
 import PublicCatalog from './PublicCatalog'
-
-const osMenu = [
-  ['Organisasi & Legal','/organization',Building2,'Identitas, legalitas & pengelola'],['Kepatuhan','/compliance',ShieldCheck,'Persyaratan, kontrol & evidence'],['Jamaah','/jamaah',UsersRound,'Profil, dokumen & persetujuan'],['Penerimaan Inquiry','/inquiries',ClipboardCheck,'Inquiry perjalanan & permintaan booking'],['Produk & Keberangkatan','/packages',PlaneTakeoff,'Program, keberangkatan & grup'],['Operasional','/operations',PlaneTakeoff,'Penerbangan, hotel, transport & layanan'],['Keuangan','/finance',WalletCards,'Invoice, pembayaran & rekonsiliasi'],['SDM & People','/people',UsersRound,'Staf, kompetensi & peran'],['Insiden & Keluhan','/incidents',AlertTriangle,'Kasus & tindak lanjut'],['Privasi','/privacy',LockKeyhole,'Data inventory, requests & consent'],['Audit','/audit',ScrollText,'Audit events & access evidence'],['Laporan & Cetak','/reports',FileText,'Laporan operasional & compliance'],
-] as const
 
 const slides = [
   { kicker:'PERJALANAN SUCI', title:'Perjalanan yang layak dikenang.', text:'Haji & Umrah experience yang dirancang dengan ritme yang tenang, detail yang jelas, dan dukungan yang terasa sepanjang perjalanan.', scene:'makkah', photo:'https://images.unsplash.com/photo-1693590614566-1d3ea9ef32f7?auto=format&fit=crop&w=2400&q=85', place:'Makkah Al-Mukarramah', note:'Dimulai dengan niat.' },
@@ -17,20 +13,17 @@ const slides = [
 
 export default function DynamicLanding() {
   const [active, setActive] = useState(0)
-  const [menuOpen, setMenuOpen] = useState(false)
-  const slide = slides[active]
+    const slide = slides[active]
   useEffect(() => { const t = window.setInterval(() => setActive(v => (v + 1) % slides.length), 6500); return () => window.clearInterval(t) }, [])
 
   return <main className="immersiveTravel">
     <div className="immersiveTop"><span><Sparkles size={12}/> HAJI TRAVEL OS</span><span>INDONESIA · MAKKAH · MADINAH</span></div>
     <header className="immersiveNav">
       <Link href="#top" className="brandMark"><b>HAJI</b><span>TRAVEL OS</span></Link>
-      <nav><Link href="#programs" onClick={() => setMenuOpen(false)}>Program</Link><Link href="#experience" onClick={() => setMenuOpen(false)}>Pengalaman</Link><Link href="#story" onClick={() => setMenuOpen(false)}>Alur perjalanan</Link><Link href="/faq" onClick={() => setMenuOpen(false)}>FAQ</Link><button className="osMenuTrigger" onClick={() => setMenuOpen(v => !v)} aria-expanded={menuOpen}>{menuOpen ? <X size={15}/> : <Menu size={15}/>} Menu OS</button></nav>
+      <nav><Link href="#programs">Program</Link><Link href="#experience">Pengalaman</Link><Link href="#story">Alur perjalanan</Link><Link href="/faq">FAQ</Link></nav>
       <Link href="/inquire" className="navAction">Rencanakan perjalanan <ArrowRight size={15}/></Link>
-      <button className="navMenu" aria-label={menuOpen ? "Tutup menu" : "Buka menu"} aria-expanded={menuOpen} onClick={() => setMenuOpen(v => !v)}>{menuOpen ? <X size={21}/> : <Menu size={21}/>}</button>
+      
     </header>
-    {menuOpen && <div className="osMenuPanel"><div className="osMenuIntro"><span className="eyebrow">HAJITRAVEL OS</span><h3>Semua ruang kerja dalam satu ekosistem.</h3><p>Menu operasional tetap terhubung langsung ke modul HAJITRAVEL OS.</p></div><div className="osMenuGrid">{osMenu.map(([label,href,Icon,desc])=><Link href={href} key={href} onClick={()=>setMenuOpen(false)}><span className="osIcon"><Icon size={17}/></span><span><b>{label}</b><small>{desc}</small></span><ChevronRight size={15}/></Link>)}</div><div className="osMenuFooter"><Link href="/admin">Control Center <ArrowRight size={14}/></Link><Link href="/login">Masuk Portal <ArrowRight size={14}/></Link></div></div>}
-
     <section id="top" className="immersiveHero">
       <div className={'heroScene scene-' + slide.scene} key={slide.scene} style={{"--hero-photo": `url(${slide.photo})`} as CSSProperties}>
         <div className="scenePhoto"/><div className="sceneSky"/><div className="sceneMoon"/><div className="sceneGlow"/>
