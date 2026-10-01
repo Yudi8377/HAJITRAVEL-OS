@@ -1,0 +1,15 @@
+import Link from 'next/link'
+import { createHash } from 'node:crypto'
+import { requireCapability } from '../../../src/access/runtime'
+import { createServerSupabaseClient } from '../../../src/lib/supabase/server'
+export const dynamic='force-dynamic'
+export default async function Page({searchParams}:{searchParams:Promise<{token?:string}>}){
+ const a=await requireCapability('digital_id.read'); const p=await searchParams; const token=String(p.token??'').trim()
+ if(!token) return <main className='controlPage'><section className='sectionCard'><h1>Credential not found</h1><Link href='/digital-id-admin'>Back</Link></section></main>
+ const hash=createHash('sha256').update(token).digest('hex'); const s=await createServerSupabaseClient()
+ const {data:id}=await s.schema('identity').from('digital_pilgrim_ids').select('id,digital_id_no,status,issued_at,expires_at,last_scanned_at,scan_count,jamaah_id,registration_id').eq('organization_id',a.organizationId).eq('qr_token_hash',hash).maybeSingle()
+ if(!id || id.status!=='ISSUED' || (id.expires_at && new Date(id.expires_at)<new Date())) return <main className='controlPage'><section className='sectionCard'><h1>Credential invalid or expired</h1><p>This credential is not an official passport, visa, airline or government credential.</p><Link href='/digital-id-admin'>Back</Link></section></main>
+ await s.schema('identity').rpc('touch_digital_id_scan',{p_token_hash:hash})
+ const [{data:j},{data:r}]=await Promise.all([s.schema('jamaah').from('profiles').select('jamaah_no,full_name').eq('id',id.jamaah_id).single(),s.schema('jamaah').from('registrations').select('registration_no,status').eq('id',id.registration_id).single()])
+ return <main className='controlPage'><div className='moduleHero'><div><span className='eyebrow'>CREDENTIAL VALIDATION</span><h1>Digital Pilgrim ID</h1><p>Internal operational identity. Validate against HAJITRAVEL OS before using the identity for service handoff.</p></div><div className='moduleHeroStamp'>VALID<br/>ID</div></div><section className='sectionCard'><div className='kpiGrid'><div className='kpi'><span>ID</span><b>{id.digital_id_no}</b><small>Opaque operational identifier</small></div><div className='kpi'><span>Jamaah</span><b>{j?.jamaah_no??'—'}</b><small>{j?.full_name??'—'}</small></div><div className='kpi'><span>Registration</span><b>{r?.registration_no??'—'}</b><small>{r?.status??'—'}</small></div><div className='kpi'><span>Status</span><b>VALID</b><small>Scan #{id.scan_count+1}</small></div></div><div className='towerStrip'><div><span className='eyebrow'>SECURITY BOUNDARY</span><b>Not a government credential</b><small>QR/NFC/BLE integrations must not be represented as passport, visa, boarding pass, or official government identity unless an authorized integration exists.</small></div></div><Link href='/digital-id-admin' className='primaryCta'>Back to Digital Identity</Link></section></main>
+}
