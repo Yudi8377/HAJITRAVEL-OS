@@ -25,6 +25,8 @@ export default async function Admin() {
   }
   const data = await getDashboardSnapshot()
   const money = new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0})
+  const exposure = data.attention.documents + data.attention.incidents
+  const exceptionCount = data.attention.departures + data.attention.incidents
   return (
     <div className="adminShell">
       <aside className="adminSide">
@@ -55,15 +57,21 @@ export default async function Admin() {
             <Link href="/jamaah/new" className="primaryCta">+ Tambah Jamaah</Link>
           </div>
           <div className="kpiGrid">
-            <Kpi label="Jamaah terdaftar" value={String(data.jamaahCount)} note="RLS organization-scoped" />
-            <Kpi label="Keberangkatan" value={String(data.departureCount)} note="Mendatang" />
-            <Kpi label="Outstanding" value={money.format(data.outstanding)} note="Invoice belum lunas" />
-            <Kpi label="Readiness" value={data.readiness == null ? '—' : data.readiness + '%'} note="Checklist wajib" />
+            <Kpi label="Jamaah" value={String(data.jamaahCount)} note="Organization-scoped" />
+            <Kpi label="Departures" value={String(data.departureCount)} note="Upcoming control" />
+            <Kpi label="Readiness" value={data.readiness == null ? '—' : data.readiness + '%'} note="Required checklist" />
+            <Kpi label="Outstanding" value={money.format(data.outstanding)} note="Unpaid exposure" />
+            <Kpi label="Compliance exposure" value={String(exposure)} note="Reviews + incidents" />
+            <Kpi label="Exceptions" value={String(exceptionCount)} note="Operational attention" />
           </div>
+          <section className="towerStrip">
+            <div><span className="eyebrow">EXECUTIVE CONTROL TOWER</span><b>Departure readiness at a glance</b><small>Prioritaskan keberangkatan yang membutuhkan tindakan sebelum handoff operasional.</small></div>
+            <div className="towerLegend"><span><i className="towerDot ready"/> READY</span><span><i className="towerDot watch"/> WATCH</span><span><i className="towerDot risk"/> ACTION</span></div>
+          </section>
           <div className="dashboardGrid">
             <section className="dashCard large">
               <div className="dashHead"><div><span className="eyebrow">DEPARTURES</span><h3>Upcoming departures</h3></div><Link href="/operations">View all <ArrowUpRight size={15}/></Link></div>
-              {data.upcoming.length === 0 ? <Empty label="Belum ada keberangkatan mendatang." /> : <div className="departureList">{data.upcoming.map(item => <div className="departure" key={item.id}><div className="depInfo"><b>{item.code}</b><span>{item.groupCode ?? 'No group'} · {item.jamaahCount} Jamaah</span></div><span className="depStatus">{item.status}</span></div>)}</div>}
+              {data.upcoming.length === 0 ? <Empty label="Belum ada keberangkatan mendatang." /> : <div className="departureList">{data.upcoming.map(item => <div className="departure" key={item.id}><div className="depInfo"><b>{item.code}</b><span>{item.groupCode ?? 'No group'} · {item.jamaahCount} Jamaah · {item.departureDate}</span></div><div className="depControl"><span className={`readinessPill ${item.readiness == null ? 'unknown' : item.readiness >= 80 ? 'ready' : item.readiness >= 60 ? 'watch' : 'risk'}`}>{item.readiness == null ? 'NO DATA' : item.readiness + '% READY'}</span><span className="depStatus">{item.status}</span></div></div>)}</div>}
             </section>
             <section className="dashCard">
               <div className="dashHead"><div><span className="eyebrow">ATTENTION</span><h3>Needs action</h3></div><AlertTriangle size={17}/></div>
