@@ -16,6 +16,7 @@ const modules = [
   ['Operations','Groups, flights & service','/operations',Activity],
   ['Journey Control','Flights, hotels & transport','/operations-admin',Hotel],
   ['Readiness','Documents, visa & handoff','/readiness-admin',FileCheck2],
+  ['Journey','Pilgrim timeline & milestones','/journey-admin',Activity],
   ['Risk Center','Exceptions, SLA & evidence','/risk',TriangleAlert],
   ['Audit','Traceability & events','/audit',ShieldCheck],
 ] as const
