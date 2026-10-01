@@ -1,8 +1,8 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { requireCapability } from '../../../src/access/runtime'
-import { createServerSupabaseClient } from '../../../src/lib/supabase/server'
+import { requireCapability } from '../../src/access/runtime'
+import { createServerSupabaseClient } from '../../src/lib/supabase/server'
 
 function textValue(formData: FormData, key: string) {
   return String(formData.get(key) ?? '').trim()
