@@ -39,6 +39,17 @@ export default async function Admin() {
           <div className="adminActions"><span className="liveDot"/> STAGING <Link href="/" className="publicButton">View website</Link></div>
         </header>
         <div className="adminPage">
+          <section className="adminHero">
+            <div className="adminHeroPhoto" aria-hidden="true"/>
+            <div className="adminHeroShade" aria-hidden="true"/>
+            <div className="adminHeroContent">
+              <span className="eyebrow">HAJITRAVEL OS · EXECUTIVE CONTROL</span>
+              <h2>Menjalankan perjalanan suci dengan <em>kendali penuh.</em></h2>
+              <p>Satu control room untuk jamaah, paket, keberangkatan, keuangan, compliance, operasi, dan audit — dengan data organisasi yang terkontrol.</p>
+              <div className="adminHeroMeta"><span><ShieldCheck size={15}/> Security-first</span><span><Plane size={15}/> Departure intelligence</span><span><Activity size={15}/> Live operational view</span></div>
+            </div>
+            <div className="adminHeroStamp"><small>CONTROLLED WORKSPACE</small><b>HAJITRAVEL<br/>OPERATING SYSTEM</b><span>STAGING · PRIVATE</span></div>
+          </section>
           <div className="welcome">
             <div><span className="eyebrow">CONTROL ROOM</span><h2>Selamat datang di <em>control room.</em></h2><p>Ringkasan operasional berbasis data organisasi yang sedang aktif.</p></div>
             <Link href="/jamaah/new" className="primaryCta">+ Tambah Jamaah</Link>
