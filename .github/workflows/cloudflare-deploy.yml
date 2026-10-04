@@ -30,6 +30,9 @@ jobs:
       - name: Initialize vinext for Cloudflare Workers
         run: npx vinext init --platform=cloudflare --skip-check
 
+      - name: Restore Cloudflare build command
+        run: npm pkg set scripts.build:vinext="vite build"
+
       - name: Typecheck
         run: npm run typecheck
 
