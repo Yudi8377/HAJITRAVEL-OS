@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { Activity, ArrowUpRight, BrainCircuit, Building2, CircleDollarSign, FileCheck2, Landmark, Network, Plane, ShieldAlert, ShieldCheck, Users, WalletCards } from 'lucide-react'
+import { Activity, ArrowUpRight, BrainCircuit, Building2, CircleDollarSign, FileCheck2, Landmark, Network, Plane, ShieldAlert, ShieldCheck, Users, WalletCards, type LucideIcon } from 'lucide-react'
 import { HaajiLogo } from '../../src/components/HaajiLogo'
 import { getDashboardSnapshot } from '../../src/data/dashboard'
 import { resolveAccessContext } from '../../src/access/runtime'
@@ -8,7 +8,10 @@ import { resolveAccessContext } from '../../src/access/runtime'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-const groups = [
+type ModuleItem = [string, string, string, LucideIcon]
+type ModuleGroup = { title: string; items: ModuleItem[] }
+
+const groups: ModuleGroup[] = [
   { title:'Executive', items:[['Command Center','Executive overview','/control-center',Activity],['Executive Briefing','AI-assisted management brief','/control-center',BrainCircuit],['KPI & BI','Performance intelligence','/control-center',Network]] },
   { title:'Sales & CRM', items:[['Customer 360','Customers, leads & relationships','/jamaah',Users],['Sales Pipeline','Leads, opportunities & conversion','/jamaah',Activity],['Marketing','Campaigns & acquisition','/inquire',ArrowUpRight]] },
   { title:'Hajj & Umrah', items:[['Jamaah','Profiles, documents & consent','/jamaah',Users],['Packages','Products & departure plans','/packages-admin',Plane],['Registration','Registration lifecycle','/registrations-admin',FileCheck2],['Booking & Payment','Commercial transactions','/finance',CircleDollarSign],['Departure','Groups & operational control','/operations',Plane],['Flight / Hotel / Transport','Service fulfillment','/operations-admin',Landmark],['Readiness & Visa','Documents & readiness graph','/readiness-admin',FileCheck2],['Journey','Pilgrim milestones','/journey-admin',Activity],['Digital ID','QR identity credential','/digital-id-admin',ShieldCheck],['Safety & Guardian','Incidents & emergency control','/safety-admin',ShieldAlert]] },
@@ -18,9 +21,7 @@ const groups = [
   { title:'Procurement & Supplier', items:[['Procurement','Requests, RFQ & PO','/control-center',Landmark],['Suppliers','Vendor master & performance','/control-center',Building2],['Contracts','Commercial terms & SLA','/audit',FileCheck2]] },
   { title:'Legal, GRC & Security', items:[['Legal & Contracts','Corporate legal control','/audit',FileCheck2],['Risk Center','Risk, exceptions & SLA','/risk',ShieldAlert],['Compliance','Controls & evidence','/compliance',ShieldCheck],['Audit','Immutable traceability','/audit',ShieldCheck],['Security & Access','RBAC, capabilities & scope','/control-center',ShieldCheck]] },
   { title:'AI & Integration', items:[['AI Command','Governed enterprise agents','/control-center',BrainCircuit],['Integrations','Controlled endpoints','/control-center',Network],['Workflow & Approvals','Maker-checker-approver flows','/control-center',Activity]] },
-] as const
-
-const modules = groups.flatMap(g=>g.items)
+]
 
 export default async function Admin() {
   const access = await resolveAccessContext()
@@ -87,6 +88,6 @@ export default async function Admin() {
 
 function Kpi({label,value,note}:{label:string,value:string,note:string}){return <div className="kpi"><span>{label}</span><b>{value}</b><small>{note}</small></div>}
 function Action({title,sub}:{title:string,sub:string}){return <div className="action"><span><b>{title}</b><small>{sub}</small></span><ArrowUpRight size={14}/></div>}
-function Governance({title,text,icon:Icon}:{title:string,text:string,icon:any}){return <div><Icon size={18}/><div><b>{title}</b><span>{text}</span></div></div>}
+function Governance({title,text,icon:Icon}:{title:string,text:string,icon:LucideIcon}){return <div><Icon size={18}/><div><b>{title}</b><span>{text}</span></div></div>}
 function Empty({label}:{label:string}){return <div className="emptyState">{label}</div>}
 function AccessDenied({role}:{role:string|null}){return <main style={{minHeight:'100vh',display:'grid',placeItems:'center',padding:32}}><section className="dashCard" style={{maxWidth:620,width:'100%'}}><span className="eyebrow">ACCESS CONTROL</span><h1>Akses control center tidak tersedia</h1><p>Akun ini belum memiliki organization scope aktif atau capability <b>reports.read</b>.</p><p>Role saat ini: <b>{role??'—'}</b></p><Link href="/login?next=/admin" className="primaryCta">Kembali ke login</Link></section></main>}
