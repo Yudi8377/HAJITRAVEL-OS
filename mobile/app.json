@@ -1,0 +1,1 @@
+{"expo":{"name":"HAJITRAVEL","slug":"hajitravel-pilgrim","version":"1.0.0","orientation":"portrait","scheme":"hajitravel","userInterfaceStyle":"light","android":{"package":"com.hajitravel.pilgrim","adaptiveIcon":{"backgroundColor":"#0d3b36"}},"plugins":["expo-secure-store","expo-camera"]}}
