@@ -28,7 +28,7 @@ jobs:
         run: npm install --no-audit --no-fund
 
       - name: Initialize vinext for Cloudflare Workers
-        run: npx vinext init --platform=cloudflare --skip-check
+        run: npx vinext@1.0.0 init --platform=cloudflare --skip-check
 
       - name: Restore Cloudflare build command
         run: npm pkg set scripts.build:vinext="vite build"
